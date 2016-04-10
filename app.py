@@ -20,9 +20,9 @@ if __name__ == '__main__':
     static_root = os.path.join(server_root, 'static').replace('\\', '/')
     host = os.environ.get('SERVER_HOST', 'localhost')
     try:
-        port = int(os.environ.get('SERVER_PORT', '8080'))
+        port = int(os.environ.get('SERVER_PORT', '8090'))
     except ValueError:
-        port = 8080
+        port = 8090
 
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):

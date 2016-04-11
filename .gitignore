@@ -8,9 +8,6 @@ __pycache__/
 # uploads
 /input/*.csv
 
-# dependencies
-bottle.py
-
 # PTVS analysis
 .ptvs/
 

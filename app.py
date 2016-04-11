@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     server_root = os.path.abspath(os.path.dirname(__file__))
     static_root = os.path.join(server_root, 'static').replace('\\', '/')
-    host = os.environ.get('SERVER_HOST', 'localhost')
+    host = os.environ.get('SERVER_HOST', '0.0.0.0')
     try:
         port = int(os.environ.get('SERVER_PORT', '8090'))
     except ValueError:

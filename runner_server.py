@@ -35,12 +35,11 @@ class Runner(object):
         importer = CSVImporter()
         try:
             system = importer.load(self.inFileName)
+            simulator = system.run()
+            exporter.export(self.outFileName, system, simulator)
         except CSVParserException as e:
+            os.remove(self.inFileName)
             return e.error
-        #val = system.inflows.values()
-        #return val[0].inflows
-        simulator = system.run()
-        exporter.export(self.outFileName, system, simulator)
         os.remove(self.inFileName)
         return ''
         

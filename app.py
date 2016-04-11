@@ -25,7 +25,12 @@ if __name__ == '__main__':
         port = int(os.environ.get('SERVER_PORT', '8090'))
     except ValueError:
         port = 8090
-
+    
+    if not os.path.exists(os.path.join(server_root,'outputs')):
+        os.makedirs('outputs')
+    if not os.path.exists(os.path.join(server_root, 'input')):
+        os.makedirs('input')
+    
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):
         #the server need to serve the static files

@@ -45,11 +45,18 @@
 					{{ output }} </br>
 					<div class="date">{{ date }}</div>
 				</td>
-				<td style="padding:10px;">
+				<td>
 					<form action="/download" method="post" enctype="multipart/form-data">	
 						<input type="text" name="output" value={{ output }} style="display:none;"/>
 						<input type="text" name="date" value={{ date }} style="display:none;"/>
 						<input type="submit" value="Download">
+		  			</form>
+				</td>
+				<td style="padding:10px;">
+					<form action="/download" method="post" enctype="multipart/form-data">	
+						<input type="text" name="output" value='source' style="display:none;"/>
+						<input type="text" name="date" value={{ date }} style="display:none;"/>
+						<input type="submit" value="Source">
 		  			</form>
 				</td>
 				<td>

@@ -117,21 +117,35 @@ def downloadFile():
         #get filename and date form the form
         output = request.forms.get('output')
         date = request.forms.get('date')
+        #replace the : with + so the filesystem can handle the name
+        date = date.replace(':', '+')
+        
+        #if the source should be downloaded
+        if output == 'source':
+            for root, dirs, files in os.walk('analysis/'+date):
+                for f in files:
+                    if f[0:4] != 'out+' and f[-4:] == '.csv':
+                        return static_file(date+'/'+f, root='analysis', download=True)
+            return '''
+                This file does not exist anymore! Somebody must have deleted it.
+                <form action="/upload" method="get">
+                    <input type="submit" value="Ok"/>
+                </form>
+                '''
+            
         #check if it is a duplicate outputFile name
         if output[-1] == ')':
-            #if so get rid of the number
+            #if so get rid of the number (everything after .csv)
             output = output[0:output.find('.csv')+4]
-        #replace teh : with + so the filesystem can handle the name
-        date = date.replace(':', '+')
         #create the full path to the outputfile
-        output = date + "/" + "out+" + output
+        download = date + "/" + "out+" + output
         #check if file is still there
         outputs = scanForOutputs()
-        if output in outputs:
+        if download in outputs:
             #give the user the download
-            return static_file(output, root='analysis', download=True)
+            return static_file(download, root='analysis', download=True)
         else:
-            #if it is gone, show an error message
+            #if it is not there anymore, show an error message
             return '''
                 This file does not exist anymore! Somebody must have deleted it.
                 <form action="/upload" method="get">

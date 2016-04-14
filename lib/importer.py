@@ -27,7 +27,6 @@ class CSVImporter(object):
         self.haveTimeIndex = False
         self.haveInflow = False
         self.haveEntropy = False
-        self.entropyRows = False
         
         self.rowNumber = 1
         
@@ -78,10 +77,9 @@ class CSVImporter(object):
                 #if we are in the description row, we can count the years (periods) if we didn't define them in the header
                 if metadata[0].lower().replace(" ", "") == "transfertype":
                     self.checkForTimeIndex(values)
+                #if we get extra information for the calcualtion of the entropy
                 elif self.system.entropy and metadata[0].lower().replace(" ", "") == "entropy":
-                    self.entropyRows = True
-                elif self.entropyRows:
-                    self.checkAndHandleEntropy(row, metadata, descrition, values)
+                    self.checkAndHandleEntropy(row, metadata, description, values)
                 #the other rows contain data (but we ignore empty rows) relevant for the Matflow calculation
                 else:
                     self.checkAndHandleData(row, metadata, description, values)
@@ -1029,6 +1027,8 @@ class CSVImporter(object):
 
         return splittedValues
     
+    def checkandHandleEntropyData(self, row, metadata, description, values):
+        return
     
     #create nodes from metadata and read data
     def createNodes(self, transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,colTransferType,colSrc,colSrcMaterial,colSrcUnit,colDst,colDstMaterial,colDstUnit, splittedValues, nodeName, targetName, metadata, description, values):

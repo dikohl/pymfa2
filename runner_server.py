@@ -24,6 +24,7 @@ import os
 from os.path import splitext
 from lib.importer import CSVImporter, CSVParserException
 from lib.exporter import CSVExporter
+from lib.entropy import EntropyCalc
 
 class Runner(object):
     def __init__(self, inputFile, outputFile):
@@ -36,7 +37,9 @@ class Runner(object):
         try:
             system = importer.load(self.inFileName)
             simulator = system.run()
-            exporter.export(self.outFileName, system, simulator)
+            entropy = EntropyCalc(system, simulator)
+            #simulator??system?? = entropy.run
+            #exporter.export(self.outFileName, system, simulator)
         except CSVParserException as e:
             os.remove(self.inFileName)
             return e.error

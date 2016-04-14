@@ -4,12 +4,11 @@
 Created in February 2016
 
 @author: RoBa
+modified by Dimitri Kohler in March 2016
 
 The exporter module exports the results of the calculations as a table to a
 csv file and creates plots of the material flows and stocks.
 """
-
-
 
 from io import BytesIO as StringIO
 import os
@@ -29,7 +28,10 @@ class CSVExporter(object):
     timeIndices = system.timeIndices
     if periods < len(timeIndices):
       timeIndices = timeIndices[:periods]
-
+    
+    # get path to outFile to save the plots there
+    path = outFileName[0:outFileName.find('out+')]
+    
     '''
     # get path to outFile to save the plots there
     path = ''
@@ -213,8 +215,6 @@ class CSVExporter(object):
       if len(system.percentiles) != 0 and runs != 1:
         for j in range(len(system.percentiles)):
           table.append(stockPercentileRows[(i*len(system.percentiles))+j])
-          
-
     '''
     # save time span plots
     timeIDs = np.array(timeIndices)
@@ -402,21 +402,11 @@ class CSVExporter(object):
             plt.close()
             
       print("\n")
-    '''   
-                
+     '''          
     with open(outFileName, 'w') as f:
         w = csv.writer(f, delimiter=';', lineterminator='\n',
                        quotechar='"', quoting=csv.QUOTE_MINIMAL)
         w.writerows(table)
     return
-
-    # serialize to CSV 
-    '''
-    fileLike = StringIO()
-    w = csv.writer(fileLike, delimiter=';', lineterminator='\n',
-                   quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    w.writerows(table)
-    return fileLike.getvalue()
-    '''
     
     

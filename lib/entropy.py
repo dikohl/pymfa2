@@ -22,9 +22,12 @@ class EntropyCalc(object):
             flowValues[comp.name, key] = []
             flowValues[comp.name, key].append(np.mean(comp.outflowRecord[key], axis=0).tolist())
         
+        print(flowValues)
+        
         for i in range(len(system.metadataMatrix)):
             if system.metadataMatrix[i][0].lower() == "inflow":
-                #need these values for stage1
+                print(system.metadataMatrix[i])
+                #linkedFlowValues.append(system.metadataMatrix[])
             else:
                 nodeName = (system.metadataMatrix[i][1] + "_" +
                             system.metadataMatrix[i][2] + "_" +
@@ -32,7 +35,7 @@ class EntropyCalc(object):
                 targName = (system.metadataMatrix[i][4] + "_" +
                             system.metadataMatrix[i][5] + "_" +
                             system.metadataMatrix[i][6]).lower()
-                linkedFlowValues.append(system.metadataMatrix[i]+flowValues[nodeName, targName][0])
+                flowValues[nodeName, targName][0]
         firstValue = len(system.metadataMatrix[0])+1
         
         self.computeStages(linkedFlowValues, firstValue)

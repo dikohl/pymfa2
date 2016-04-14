@@ -13,7 +13,7 @@ import routes
 
 
 if '--debug' in sys.argv[1:]:
-    #if --debug is used in the arguments we can run the server in debug mode.
+    #if --debug is used in the arguments we can run the server in debug mode
     bottle.debug(True)
 
 if __name__ == '__main__':
@@ -26,10 +26,8 @@ if __name__ == '__main__':
     except ValueError:
         port = 8090
     
-    if not os.path.exists(os.path.join(server_root,'outputs')):
-        os.makedirs('outputs')
-    if not os.path.exists(os.path.join(server_root, 'input')):
-        os.makedirs('input')
+    if not os.path.exists(os.path.join(server_root,'analysis')):
+        os.makedirs('analysis')
     
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):

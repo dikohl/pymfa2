@@ -2,11 +2,8 @@
 __pycache__/
 *.pyc
 
-# outputs
-/outputs/*.csv
-
-# uploads
-/input/*.csv
+# analysis
+/analysis
 
 # PTVS analysis
 .ptvs/

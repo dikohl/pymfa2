@@ -30,7 +30,7 @@
 					<input type="file" name="uploadFile"/>
 				</td>
 				<td>
-        			<input id="start" type="submit" value="Start simulation" />
+        			<button class="btn btn-success" id="start" type="submit">Start simulation</button>
 				</td>
 			</tr>
 		</table>
@@ -49,21 +49,21 @@
 					<form action="/download" method="post" enctype="multipart/form-data">	
 						<input type="text" name="output" value={{ output }} style="display:none;"/>
 						<input type="text" name="date" value={{ date }} style="display:none;"/>
-						<input type="submit" value="Download">
+						<button class="btn btn-primary" type="submit">Download</button>
 		  			</form>
 				</td>
 				<td style="padding:10px;">
 					<form action="/download" method="post" enctype="multipart/form-data">	
 						<input type="text" name="output" value='source' style="display:none;"/>
 						<input type="text" name="date" value={{ date }} style="display:none;"/>
-						<input type="submit" value="Source">
+						<button type="submit" class="btn btn-success">Source</button>
 		  			</form>
 				</td>
 				<td>
 					<form onsubmit="return handleDelete(this)" action="/delete" method="post" enctype="multipart/form-data">
 						<input type="text" name="output" value={{ output }} style="display:none;"/>
 						<input type="text" name="date" value={{ date }} style="display:none;"/>
-						<input type="submit" value="Delete">
+						<button class="btn btn-danger" type="submit">Delete</button>
 					</form>
 				</td>
 			</tr>
@@ -86,7 +86,7 @@
 
 <footer style="margin-top:40px;">
     <form action="/logout" method="post" enctype="multipart/form-data">
-       	<input type="submit" value="Logout"/>
+       	<button class="btn btn-primary" type="submit">Logout</button>
    	</form>
 </footer>
 

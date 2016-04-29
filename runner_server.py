@@ -37,7 +37,7 @@ class Runner(object):
         try:
             system = importer.load(self.inFileName)
             simulator = system.run()
-            #entropy = EntropyCalc(system, simulator)
+            EntropyCalc(system, simulator)
             #simulator??system?? = entropy.run
             exporter.export(self.outFileName, system, simulator)
         except CSVParserException as e:

@@ -152,6 +152,7 @@ class System(object):
                "target node: %s")
                % (self.inflows[node].nodeName, targ))
       self.dpmfaSinglePeriodInflows[node] = []
+      print(srcNode.inflows)
       for i in range(len(srcNode.inflows)):
         if srcNode.inflows[i][0] == "fix":
           self.dpmfaSinglePeriodInflows[node].append(

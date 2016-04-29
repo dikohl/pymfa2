@@ -22,8 +22,6 @@ class EntropyCalc(object):
             flowValues[comp.name, key] = []
             flowValues[comp.name, key].append(np.mean(comp.outflowRecord[key], axis=0).tolist())
         
-        print(flowValues)
-        
         for i in range(len(system.metadataMatrix)):
             if system.metadataMatrix[i][0].lower() == "inflow":
                 print(system.metadataMatrix[i])
@@ -38,7 +36,7 @@ class EntropyCalc(object):
                 flowValues[nodeName, targName][0]
         firstValue = len(system.metadataMatrix[0])+1
         
-        self.computeStages(linkedFlowValues, firstValue)
+        #self.computeStages(linkedFlowValues, firstValue)
         
         #dict with all materialFlows
         #dict with all substanceFlows

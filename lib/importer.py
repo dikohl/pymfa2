@@ -33,7 +33,7 @@ class CSVImporter(object):
         self.valuesOffset = 8           # index of the first column that has values
         
         self.supportedTransferTypes = \
-            ['inflow', 'delay', 'rate', 'conversion', 'fraction']
+            ['inflow', 'delay', 'rate', 'conversion', 'fraction','entropy']
         self.supportedProbabilityDistributions = ['uniform','normal', 'triangular']
         self.supportedReleaseFunctions = ['fix', 'list', 'rand', 'weibull']
 
@@ -79,7 +79,8 @@ class CSVImporter(object):
                     self.checkForTimeIndex(values)
                 #if we get extra information for the calcualtion of the entropy
                 elif self.system.entropy and metadata[0].lower().replace(" ", "") == "entropy":
-                    self.checkAndHandleEntropy(row, metadata, description, values)
+                    #self.checkAndHandleEntropy(row, metadata, description, values)
+                    filler = 1
                 #the other rows contain data (but we ignore empty rows) relevant for the Matflow calculation
                 else:
                     self.checkAndHandleData(row, metadata, description, values)
@@ -391,7 +392,7 @@ class CSVImporter(object):
         self.system.metadataMatrix.append(metadata + [description])
         
         #get values from data columns
-        splittedValues = self.transferTypeSanityChecksAndGetData(transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,
+        splittedValues = self.transferTypeSanityChecks(transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,
             colTransferType,colSrc,colSrcMaterial,colSrcUnit,colDst,colDstMaterial,colDstUnit, metadata, description, values)
 
         nodeName = src + '_' + srcMaterial + '_' + srcUnit
@@ -437,7 +438,7 @@ class CSVImporter(object):
     
     # sanity check if supported transfer type is used
     #also we get the data from the columns if the sanity check is passed
-    def transferTypeSanityChecksAndGetData(self, transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,colTransferType,colSrc,colSrcMaterial,colSrcUnit,colDst,colDstMaterial,colDstUnit, metadata, description, values):
+    def transferTypeSanityChecks(self, transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,colTransferType,colSrc,colSrcMaterial,colSrcUnit,colDst,colDstMaterial,colDstUnit, metadata, description, values):
         tempArg = []
         splittedValues = []
         
@@ -446,7 +447,7 @@ class CSVImporter(object):
           raise CSVParserException(
                 ("row %d, col %s:\nUnexpected transfer type, got '%s' " +
                  "Please use the following transfer types:\n%s")
-                 % (rowNumber, self.colString(colTransferType), 
+                 % (self.rowNumber, self.colString(colTransferType), 
                     transferType, str(self.supportedTransferTypes)\
                     .replace("[", "").replace("]", "").replace(",", "\n")))
                     
@@ -459,7 +460,7 @@ class CSVImporter(object):
                   ("row %d, col %s:\nFirst transfer type is not an inflow. " +
                    "Please use 'inflow' as the first transfer type to " +
                    "generate an inflow to a target node.")
-                   % (rowNumber, self.colString(colTransferType)))
+                   % (self.rowNumber, self.colString(colTransferType)))
       
         # sanity check if there is a name for the source compartment and
         # if it is not a number
@@ -467,7 +468,7 @@ class CSVImporter(object):
           if src.replace(" ", "") == "":
             raise CSVParserException(
                   ("row %d, col %s:\nNo name for the source node.") 
-                   % (rowNumber, self.colString(colSrc)))
+                   % (self.rowNumber, self.colString(colSrc)))
           else:
             try:
               float(src.replace(" ", "").replace(",", ""))
@@ -477,14 +478,14 @@ class CSVImporter(object):
               raise CSVParserException(
                     ("row %d, col %s:\nNumber as a compartment name. A " +
                      "number is not allowed as compartment name, got '%s'.") 
-                     % (rowNumber, self.colString(colSrc), src))
+                     % (self.rowNumber, self.colString(colSrc), src))
                      
         # sanity check if there is a name for the target compartment and
         # if it is not a number
         if dst.replace(" ", "") == "":
           raise CSVParserException(
                 ("row %d, col %s:\nNo name for the target node.") 
-                 % (rowNumber, self.colString(colDst)))
+                 % (self.rowNumber, self.colString(colDst)))
         else:
           try:
             float(dst.replace(" ", "").replace(",", ""))
@@ -494,7 +495,7 @@ class CSVImporter(object):
             raise CSVParserException(
                   ("row %d, col %s:\nNumber as a compartment name. A number " +
                    "is not allowed as compartment name, got '%s'.") 
-                   % (rowNumber, self.colString(colDst), dst))
+                   % (self.rowNumber, self.colString(colDst), dst))
                  
         # sanity check if source unit is different from target unit 
         # if transfer type is 'conversion'      
@@ -504,7 +505,7 @@ class CSVImporter(object):
                   ("row %d, col %s and %s:\nSame source unit and target " +
                    "unit. When using a conversion as transfer type, the " +
                    "source unit has to be different from the target unit.") 
-                   % (rowNumber, self.colString(colSrcUnit), 
+                   % (self.rowNumber, self.colString(colSrcUnit), 
                       self.colString(colDstUnit)))
                       
         # sanity check if source and target unit are the same if
@@ -517,14 +518,14 @@ class CSVImporter(object):
                    "target unit. When not using a conversion as a transfer " +
                    "type, the source unit and the target unit have to be " +
                    "the same.") 
-                   % (rowNumber, self.colString(colSrcUnit), 
+                   % (self.rowNumber, self.colString(colSrcUnit), 
                       self.colString(colDstUnit)))
                                                                        
         # sanity check if we have the correct number of non-empty values
         if (not all(values) or (len(values) != len(self.system.timeIndices))):
           raise CSVParserException("row %d, col %s to %s:\nExpected %d values, got %s" %
-                (rowNumber, self.colString(valuesOffset), 
-                 self.colString(valuesOffset+len(self.system.timeIndices)),
+                (self.rowNumber, self.colString(self.valuesOffset), 
+                 self.colString(self.valuesOffset+len(self.system.timeIndices)),
                  len(self.system.timeIndices), sum([bool(v) for v in values])))
 
         # sanity checks for values when using type 'inflow'
@@ -538,7 +539,7 @@ class CSVImporter(object):
                      "Examples: 'fix|30000'\n" +
                      "          'stoch|normal|30000, 1500'\n" +
                      "          'rand|28000, 29000, 30000, 31000, 32000'")
-                     % (rowNumber, self.colString(valuesOffset+c)))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c)))
             else:
               try:
                 tempArg = list(str.split(v.replace(" ", ""), "|"))
@@ -551,7 +552,7 @@ class CSVImporter(object):
                        "Examples: 'fix|30000'\n" +
                        "          'stoch|normal|30000, 1500'\n" +
                        "          'rand|28000, 29000, 30000, 31000, 32000'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
             if tempArg[0] == "fix":
               if len(tempArg) != 2:
                 raise CSVParserException(
@@ -560,7 +561,7 @@ class CSVImporter(object):
                        "enter the inflow value type and the respective " +
                        "value as the two arguments separated by '|'.\n" +
                        "-> example input: 'fix|30000'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = float(tempArg[1])
               except ValueError:
@@ -569,7 +570,7 @@ class CSVImporter(object):
                        "to float, got '%s'. Please choose one float value " +
                        "as second argument.\nExamples: '30000', '30000.0', " +
                        "'30000.45'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
             elif tempArg[0] == "stoch":
               if len(tempArg) != 3:
@@ -580,13 +581,13 @@ class CSVImporter(object):
                        "and the respective parameters as the three " +
                        "arguments separated by '|'.\n" +
                        "-> example input: 'stoch|normal|30000, 1500.5'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               if tempArg[1] not in self.supportedProbabilityDistributions:
                 raise CSVParserException(
                       ("row %d, col %s:\nSecond argument is not a supported " +
                        "probability distribution function, got '%s'. " +
                        "Please, use one of the following functions:\n%s") %
-                       (rowNumber, self.colString(valuesOffset+c),tempArg[1],
+                       (self.rowNumber, self.colString(self.valuesOffset+c),tempArg[1],
                         str(self.supportedProbabilityDistributions).replace(
                         "[", "").replace("]", "").replace(" ", "").replace(
                         ",", "\n")))
@@ -598,7 +599,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the function " +
                        "parameters into float, got '%s'. Please choose " +
                        "float values as parameters for the chosen function.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
               if tempArg[1] == "normal" and len(tempArg[2]) != 2:
                 raise CSVParserException(
@@ -607,7 +608,7 @@ class CSVImporter(object):
                        "Please choose exactly two floats as parameters, " +
                        "got %d parameters.\n" +
                        "-> example input: 'stoch|normal|3000, 120'")
-                       % (rowNumber, self.colString(valuesOffset+c),
+                       % (self.rowNumber, self.colString(self.valuesOffset+c),
                           tempArg[2], len(tempArg[2])))
               if tempArg[1] == "triangular" and len(tempArg[2]) != 3:
                 raise CSVParserException(
@@ -616,7 +617,7 @@ class CSVImporter(object):
                        "'%s'. Please choose exactly three floats as " +
                        "parameters, got %d parameters.\n-> example input: " +
                        "'stoch|triangular|2880, 3000, 3120'")
-                       % (rowNumber, self.colString(valuesOffset+c),
+                       % (self.rowNumber, self.colString(self.valuesOffset+c),
                           tempArg[2], len(tempArg[2])))
               if tempArg[1] == "uniform" and len(tempArg[2]) != 2:
                 raise CSVParserException(
@@ -625,7 +626,7 @@ class CSVImporter(object):
                        "Please choose exactly two floats as parameters, " +
                        "got %d parameters.\n" +
                        "-> example input: 'stoch|uniform|2880, 3120'")
-                       % (rowNumber, self.colString(valuesOffset+c),
+                       % (self.rowNumber, self.colString(self.valuesOffset+c),
                           tempArg[2], len(tempArg[2])))
             elif tempArg[0] == "rand":
               if len(tempArg) > 2:
@@ -636,7 +637,7 @@ class CSVImporter(object):
                        "values as the two arguments, separated by '|'.\n" +
                        "-> example input: 'rand||28000, 29000, 30000, " +
                        "31000, 32000'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = \
                 list(float(p) for p in str.split(tempArg[1], ","))
@@ -645,7 +646,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the values to " +
                        "floats, got '%s'. Please choose floats as list " +
                        "items.\nExample: '30000, 31000.5, 29750.7'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
             else:
               raise CSVParserException(
@@ -656,7 +657,7 @@ class CSVImporter(object):
                      "Examples: 'fix|30000'\n" +
                      "          'stoch|normal|30000, 2000.5'\n" +
                      "          'rand|28000, 29000, 30000, 31000, 32000'")
-                     % (rowNumber, self.colString(valuesOffset+c), v))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c), v))
                      
             splittedValues.append(tempArg)
                      
@@ -673,7 +674,7 @@ class CSVImporter(object):
                      "Examples: 'fix|0.8|1'\n" +
                      "          'stoch|normal|0.5, 0.15|1'\n" +
                      "          'rand|0.65, 0.7, 0.71, 0.75, 0.8|1'")
-                     % (rowNumber, self.colString(valuesOffset+c)))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c)))
             else:
               try:
                 tempArg = list(str.split(v.replace(" ", ""), "|"))
@@ -686,7 +687,7 @@ class CSVImporter(object):
                        "Examples: 'fix|0.8|1'\n" +
                        "          'stoch|normal|0.5, 0.15|1'\n" +
                        "          'rand|0.65, 0.7, 0.71, 0.75, 0.8|1'") %
-                       (rowNumber, self.colString(valuesOffset+c), v))
+                       (self.rowNumber, self.colString(self.valuesOffset+c), v))
             if tempArg[0] == "fix":
               if len(tempArg) != 3:
                 raise CSVParserException(
@@ -695,7 +696,7 @@ class CSVImporter(object):
                        "following three arguments separated by '|':\n" +
                        "1. transfer value type,\n2. value,\n3. priority\n" +
                        "-> example input: 'fix|0.8|1'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = [float(tempArg[1])]
               except ValueError:
@@ -703,7 +704,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse second argument " +
                        "to float, got '%s'. Please choose a float value " +
                        "as the second argument.\nExample: '0.8'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
               try:
                 tempArg[2] = int(tempArg[2])
@@ -712,7 +713,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse third argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the third argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
             elif tempArg[0] == "stoch":
               if len(tempArg) != 4:
@@ -723,13 +724,13 @@ class CSVImporter(object):
                        "1. transfer value type,\n2. function,\n3. function " +
                        "parameters,\n4. priority\n" +
                        "-> example input: 'stoch|normal|0.5, 0.15|1'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               if tempArg[1] not in self.supportedProbabilityDistributions:
                 raise CSVParserException(
                       ("row %d, col %s:\nSecond argument is not a supported " +
                        "probability distribution function, got '%s'. " +
                        "Please, use one of the following functions:\n%s") %
-                       (rowNumber, self.colString(valuesOffset+c), tempArg[1],
+                       (self.rowNumber, self.colString(self.valuesOffset+c), tempArg[1],
                         str(self.supportedProbabilityDistributions).replace(
                         "[", "").replace("]", "").replace(" ", "").replace(
                         ",", "\n")))
@@ -741,7 +742,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the function " +
                        "parameters to float, got '%s'. Please choose " +
                        "float values as parameters for the chosen function.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
               try:
                 tempArg[3] = int(tempArg[3])
@@ -750,7 +751,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse fourth argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the fourth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[3]))
             elif tempArg[0] == "rand":
               if len(tempArg) != 3:
@@ -761,7 +762,7 @@ class CSVImporter(object):
                        "1. transfer value type,\n2. values,\n3. priority\n" +
                        "-> example input: 'rand|0.65, 0.7, 0.71, 0.75, " +
                        "0.8|1'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = \
                 list(float(p) for p in str.split(tempArg[1], ","))
@@ -770,7 +771,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the list to " +
                        "floats, got '%s'. Please choose floats as list " +
                        "items.\nExample: '0.7, 0.69, 0.71, 0.74'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
               try:
                 tempArg[2] = int(tempArg[2])
@@ -779,7 +780,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse third argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the third argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
             else:
               raise CSVParserException(
@@ -790,7 +791,7 @@ class CSVImporter(object):
                      "Examples: 'fix|0.8|1'\n" +
                      "          'stoch|normal|0.5, 0.15|1'\n" +
                      "          'rand|0.65, 0.7, 0.71, 0.75, 0.8|1'")
-                     % (rowNumber, self.colString(valuesOffset+c), v))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c), v))
                      
             splittedValues.append(tempArg)
 
@@ -808,7 +809,7 @@ class CSVImporter(object):
                      "Examples: 'fix|0.8|1|list|0.5, 0.3, 0.2|0'\n       " +
                      "   'stoch|normal|0.5, 0.15|1|weibull|1, 3, 1|0'\n  " +
                      "        'rand|0.65, 0.7, 0.71, 0.75|1|weibull|1, 3|0'")
-                     % (rowNumber, self.colString(valuesOffset+c)))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c)))
             else:
               try:
                 tempArg = list(str.split(v.replace(" ", ""), "|"))
@@ -823,7 +824,7 @@ class CSVImporter(object):
                        "Examples: 'fix|0.8|1|list|0.5, 0.3, 0.2|0'\n        " +
                        "  'stoch|normal|0.5, 0.15|1|weibull|1, 3, 1|0'\n    " +
                        "      'rand|0.65, 0.7, 0.71, 0.75|1|weibull|1, 3|0'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
             if tempArg[0] == "fix":
               if len(tempArg) != 6:
                 raise CSVParserException(
@@ -836,7 +837,7 @@ class CSVImporter(object):
                        "4. release function,\n5. parameters for release " +
                        "function,\n6. delay\n" +
                        "-> example input: 'fix|0.8|1|list|0.5, 0.3, 0.2|0'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = [float(tempArg[1])]
               except ValueError:
@@ -844,7 +845,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse second argument " +
                        "to float, got '%s'. Please choose a float value " +
                        "as the second argument.\nExample: '0.8'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
               try:
                 tempArg[2] = int(tempArg[2])
@@ -853,7 +854,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse third argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the third argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
               if tempArg[3] not in self.supportedReleaseFunctions:
                 raise CSVParserException(
@@ -861,7 +862,7 @@ class CSVImporter(object):
                        "supported release function, got '%s'. Please " +
                        "choose a supported release function as the " +
                        "fourth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[3]))
               try:
                 tempArg[4] = \
@@ -871,7 +872,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the values to " +
                        "floats, got '%s'. Please choose floats as " +
                        "fifth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[4]))
               try:
                 tempArg[5] = int(tempArg[5])
@@ -880,7 +881,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse sixth argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the sixth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[5]))
             elif tempArg[0] == "stoch":
               if len(tempArg) != 7:
@@ -895,13 +896,13 @@ class CSVImporter(object):
                        "6. parameters for release function,\n7. delay\n" +
                        "-> example input: 'stoch|normal|0.5, 0.15|1|list|" +
                        "0.5, 0.3, 0.2|0'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               if tempArg[1] not in self.supportedProbabilityDistributions:
                 raise CSVParserException(
                       ("row %d, col %s:\nSecond argument is not a supported " +
                        "probability distribution function, got '%s'. " +
                        "Please, use one of the following functions:\n%s") %
-                       (rowNumber, self.colString(valuesOffset+c), tempArg[1],
+                       (self.rowNumber, self.colString(self.valuesOffset+c), tempArg[1],
                         str(self.supportedProbabilityDistributions).replace(
                         "[", "").replace("]", "").replace(" ", "").replace(
                         ",", "\n")))
@@ -913,7 +914,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the function " +
                        "parameters to float, got '%s'. Please choose " +
                        "float values as parameters for the chosen function.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
               try:
                 tempArg[3] = int(tempArg[3])
@@ -922,7 +923,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse fourth argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the fourth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[3]))
               if tempArg[4] not in self.supportedReleaseFunctions:
                 raise CSVParserException(
@@ -930,7 +931,7 @@ class CSVImporter(object):
                        "supported release function, got '%s'. Please " +
                        "choose a supported release function as the " +
                        "fifth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[4]))
               try:
                 tempArg[5] = \
@@ -940,7 +941,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the values to " +
                        "floats, got '%s'. Please choose floats as " +
                        "sixth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[5]))
               try:
                 tempArg[6] = int(tempArg[6])
@@ -949,7 +950,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse seventh argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the seventh argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[6]))
             elif tempArg[0] == "rand":
               if len(tempArg) != 6:
@@ -963,7 +964,7 @@ class CSVImporter(object):
                        "4. release function,\n5. parameters for release " +
                        "function,\n6. delay\n-> example input: " +
                        "'rand|0.7, 0.71, 0.75|1|list|0.5, 0.3, 0.2|0'")
-                       % (rowNumber, self.colString(valuesOffset+c), v))
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), v))
               try:
                 tempArg[1] = \
                 list(float(p) for p in str.split(tempArg[1], ","))
@@ -972,7 +973,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the list to " +
                        "floats, got '%s'. Please choose floats as list " +
                        "items.\nExample: '0.7, 0.69, 0.71, 0.74'")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[1]))
               try:
                 tempArg[2] = int(tempArg[2])
@@ -981,7 +982,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse third argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the third argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[2]))
               if tempArg[3] not in self.supportedReleaseFunctions:
                   raise CSVParserException(
@@ -989,7 +990,7 @@ class CSVImporter(object):
                          "supported release function, got '%s'. Please " +
                          "choose a supported release function as the " +
                          "fourth argument.")
-                         % (rowNumber, self.colString(valuesOffset+c), 
+                         % (self.rowNumber, self.colString(self.valuesOffset+c), 
                             tempArg[3]))
               try:
                 tempArg[4] = \
@@ -999,7 +1000,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse the values to " +
                        "floats, got '%s'. Please choose floats as " +
                        "fifth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[4]))
               try:
                 tempArg[5] = int(tempArg[5])
@@ -1008,7 +1009,7 @@ class CSVImporter(object):
                       ("row %d, col %s:\nCould not parse sixth argument " +
                        "to integer, got '%s'. Please choose an integer as " +
                        "the sixth argument.")
-                       % (rowNumber, self.colString(valuesOffset+c), 
+                       % (self.rowNumber, self.colString(self.valuesOffset+c), 
                           tempArg[5]))
             else:
               raise CSVParserException(
@@ -1021,14 +1022,18 @@ class CSVImporter(object):
                      "Examples: 'fix|0.8|1|list|0.5, 0.3, 0.2|0'\n       " +
                      "   'stoch|normal|0.5, 0.15|1|weibull|1, 1, 3|0'\n  " +
                      "        'rand|0.65, 0.7, 0.71, 0.75|1|weibull|1, 3|0'")
-                     % (rowNumber, self.colString(valuesOffset+c), v))
+                     % (self.rowNumber, self.colString(self.valuesOffset+c), v))
                      
             splittedValues.append(tempArg)
 
         return splittedValues
     
     def checkandHandleEntropyData(self, row, metadata, description, values):
-        return
+        filler = 2
+        #if transferType == "entropy":
+            #for c, v in enumerate(values):
+                #nur Zahlen zwischen 0 und 1
+                #keine Prozentzeichen
     
     #create nodes from metadata and read data
     def createNodes(self, transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,colTransferType,colSrc,colSrcMaterial,colSrcUnit,colDst,colDstMaterial,colDstUnit, splittedValues, nodeName, targetName, metadata, description, values):

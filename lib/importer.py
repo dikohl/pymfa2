@@ -30,7 +30,7 @@ class CSVImporter(object):
         
         self.rowNumber = 1
         
-        self.valuesOffset = 8           # index of the first column that has values
+        self.valuesOffset = 9           # index of the first column that has values
         
         self.supportedTransferTypes = \
             ['inflow', 'delay', 'rate', 'conversion', 'fraction','entropy']
@@ -72,7 +72,7 @@ class CSVImporter(object):
                 if self.checkForEntropy(row):
                     continue
 
-                metadata, description, values = self.checkNumberOfColumns(row)
+                metadata, description, entropyStages, values = self.checkNumberOfColumns(row)
                 
                 #if we are in the description row, we can count the years (periods) if we didn't define them in the header
                 if metadata[0].lower().replace(" ", "") == "transfertype":
@@ -83,7 +83,7 @@ class CSVImporter(object):
                     filler = 1
                 #the other rows contain data (but we ignore empty rows) relevant for the Matflow calculation
                 else:
-                    self.checkAndHandleData(row, metadata, description, values)
+                    self.checkAndHandleData(row, metadata, description, entropyStages, values)
                 
                 #if metadata is missing information (TargetMaterial and TargetUnit) get it from the sourceMaterial and sourceUnit
                 if metadata[5] == "":
@@ -361,9 +361,10 @@ class CSVImporter(object):
                 "got %d.") % (self.rowNumber, len(self.system.timeIndices), len(row)))
         
         metadata = row[0:7]         # the columns containing type, nodes etc.
-        description = row[7]        # the 'free text' description column
+        description = row[self.valuesOffset-1]        # the 'free text' description column
+        entropyStages = row[self.valuesOffset-2]    # column for the relevant entropy stages
         values = row[self.valuesOffset:] # contains the values of the current row
-        return metadata, description, values
+        return metadata, description, entropyStages, values
     
     #get data from the columns and create nodes from the data
     def checkAndHandleData(self,row, metadata, description, values):
@@ -389,7 +390,7 @@ class CSVImporter(object):
         if metadata[6] == "":
             metadata[6] = metadata[3]
         
-        self.system.metadataMatrix.append(metadata + [description])
+        self.system.metadataMatrix.append(metadata + [entropyStages] + [description])
         
         #get values from data columns
         splittedValues = self.transferTypeSanityChecks(transferType,src,srcMaterial,srcUnit,dst,dstMaterial,dstUnit,
@@ -1029,7 +1030,13 @@ class CSVImporter(object):
         return splittedValues
     
     def checkandHandleEntropyData(self, row, metadata, description, values):
-        filler = 2
+        # if the value is for entropy calculation add it to the concentrations
+        '''if metadata[0].lower() == 'entropy':
+            for fstage in flowStages:
+                if concStages[fstage]:
+                    concStages[fstage].append(flowValue)
+                else:
+                    concStages[fstage] = [flowValue]'''
         #if transferType == "entropy":
             #for c, v in enumerate(values):
                 #nur Zahlen zwischen 0 und 1

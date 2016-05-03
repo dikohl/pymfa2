@@ -1,48 +1,48 @@
 '''create a class, similar to exporter
 It should get the needed values from the simulation and calculate the entropy for every marked flow in every year
 THEN change the exporter so it also adds a row for the entropy'''
-    #StagesMaterialFlows = dict()
-    #StagesSubstanceFlows = dict()
-    #StagesConcentrations = dict()
-    #dicts within dicts!!!!
+
+#conversion??
+#delay??
 
 
 import numpy as np
 
 class EntropyCalc(object):
-    #initiate EntropyCalc with the values of all the material and substance flows and concentrations
+    #initiate EntropyCalc with the values of all the material flows, substance flows and concentrations
     def __init__(self, system, simulator):
         #self.Hmax = ld(1/earthcrust concentration)
         
         #get the mean of every flow in the simulation
-        flowValues = {}
-        linkedFlowValues = []
+        self.flowValues = {}
         for comp in simulator.flowCompartments:
           for key in list(comp.outflowRecord.keys()):
-            flowValues[comp.name, key] = []
-            flowValues[comp.name, key].append(np.mean(comp.outflowRecord[key], axis=0).tolist())
+            self.flowValues[comp.name, key] = []
+            self.flowValues[comp.name, key].append(np.mean(comp.outflowRecord[key], axis=0).tolist())
+            
+        self.metadataMatrix = system.metadataMatrix
         
-        for i in range(len(system.metadataMatrix)):
-            if system.metadataMatrix[i][0].lower() == "inflow":
-                print(system.metadataMatrix[i])
-                #linkedFlowValues.append(system.metadataMatrix[])
-            else:
-                nodeName = (system.metadataMatrix[i][1] + "_" +
-                            system.metadataMatrix[i][2] + "_" +
-                            system.metadataMatrix[i][3]).lower()
-                targName = (system.metadataMatrix[i][4] + "_" +
-                            system.metadataMatrix[i][5] + "_" +
-                            system.metadataMatrix[i][6]).lower()
-                flowValues[nodeName, targName][0]
-        firstValue = len(system.metadataMatrix[0])+1
+    def computeSingleStage(self, materialFlows, concentrations, firstValue):
         
-        #self.computeStages(linkedFlowValues, firstValue)
-        
-        #dict with all materialFlows
-        #dict with all substanceFlows
-        #dict with all concentrations
-        
-    def calculateStage(self, materialFlows, substanceFlows, concentrations):
+        #convert units so that all are the same
+        #!!!!!!flowValue = self.convertUnits(conversions, flowValue, firstValue)!!!!!!
+
+        substanceFlowValues = dict()
+        for flow in MaterialFlows:
+            nodeName = (flow[1] + "_" +
+                        flow[2] + "_" +
+                        flow[3]).lower()
+            targName = (flow[4] + "_" +
+                        flow[5] + "_" +
+                        flow[6]).lower()
+            flowValue = self.flowValues[nodeName, targName][0]
+            concentrationValue = self.concentrationValues[nodeName, targName]
+            substanceFlowValue = []
+            for i in range(len(flowValue)):
+                # find substanceFlow by materialFlow * concentration
+                substanceFlowValue[i] = np.multiply(flowValue[i], concentrationValue[i])
+            substanceFlowValues[nodeName, targName] =  substanceFlowValue
+
         allMi = dict()
         allHIIi = dict()
         for material, flow in materialFlows.items():
@@ -60,27 +60,40 @@ class EntropyCalc(object):
         entropy = np.true_divide(sum(list(allHIIi.values())), self.Hmax)
         return entropy
     
-    #sort the values according to their TransferType
-    def computeStages(self, linkedFV, firstValue):
+    #sort the metadata according to it's stages
+    def run(self):
         #get the conversion from one unit to another
         conversions = dict()
-        for flowValue in linkedFV:
-            if flowValue[0].lower() == 'conversion' and flowValue[2] == flowValue[5]:
-                conversions[flowValue[3]] = flowValue[firstValue:]
-                linkedFV.remove(flowValue)
+        for i in range(len(system.metadataMatrix)):
+            if self.metadataMatrix[i][0].lower() == 'conversion' and flowValue[2] == flowValue[5]:
+                nodeName = (self.metadataMatrix[i][1] + "_" +
+                            self.metadataMatrix[i][2] + "_" +
+                            self.metadataMatrix[i][3]).lower()
+                targName = (self.metadataMatrix[i][4] + "_" +
+                            self.metadataMatrix[i][5] + "_" +
+                            self.metadataMatrix[i][6]).lower()
+                conversion[self.flowValue[3]] = self.flowValues[nodeName, targName][0]
+                self.metadataMatrix.remove(self.metadataMatrix[i])
         
-        #get flows from single nodes
+        #order flows by stages
         stages = dict()
-        for flowValue in linkedFV:
-            print(flowValue)
-            flowValue = self.convertUnits(conversions, flowValue, firstValue)
-            print(flowValue)
-            if (flowValue[0],flowValue[1]) in stages.keys():
-                flows = stages[(flowValue[0],flowValue[1])]
-                flows[flowValue[4]] = flowValue[firstValue:]
-                stages[(flowValue[0],flowValue[1])] = flows
+        concStages = dict()
+        for metadata in metadataMatrix:
+            flowStages = metadata[-2].split('|')
+
+            #every other flow is added to the correct stage
             else:
-                stages[(flowValue[0],flowValue[1])] = {flowValue[4]:flowValue[firstValue:]}
+                for fstage in flowStages:
+                    if stages[fstage]:
+                        stages[fstage].append(flowValue)
+                    else:
+                        stages[fstage] = [flowValue]
+        #for every stage of stages calculate entropy
+        results = dict()
+        for key in stages.keys():
+            stageResult = self.computeSingleStage(stages[key], concStages[key])
+            results[key] = stageResult
+        return results
                 
     def convertUnits(self, conversions, flowValue, firstValue):
         if flowValue[3] in conversions.keys():

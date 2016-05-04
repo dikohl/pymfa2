@@ -468,7 +468,7 @@ class CSVImporter(object):
 
         # sanity check if there is a name for the source compartment and
         # if it is not a number
-        if transferType != "inflow":  # no src for inflow types
+        if transferType != "inflow" and transferType != "concentration":  # no src for inflow types
             if src.replace(" ", "") == "":
                 raise CSVParserException(
                     ("row %d, col %s:\nNo name for the source node.")
@@ -515,7 +515,7 @@ class CSVImporter(object):
         # sanity check if source and target unit are the same if
         # transfer type is neither 'conversion' nor 'inflow'
         if transferType != "conversion" and \
-                        transferType != "inflow":
+                        transferType != "inflow" and transferType != 'concentration':
             if srcUnit != dstUnit:
                 raise CSVParserException(
                     ("row %d, col %s and %s:\nSource unit is different from " +
@@ -668,7 +668,8 @@ class CSVImporter(object):
         # sanity checks for the values when using 'rate', 'conversion' or
         # 'fraction' as transfer type
         if transferType in self.supportedTransferTypes and \
-                        transferType != 'inflow' and transferType != 'delay':
+                        transferType != 'inflow' and transferType != 'delay' \
+                        and transferType != 'concentration':
             for c, v in enumerate(values):
                 if v.replace(" ", "") == "":
                     raise CSVParserException(
@@ -1188,6 +1189,8 @@ class CSVImporter(object):
                     ("row %d:\nSource node of a 'fraction' link " +
                      "already exists as a source node of a different " +
                      "link.\nsource node: %s") % (self.rowNumber, src))
+        elif transferType == 'concentration':
+            return
         else:
             raise CSVParserException(
                 ("row %d:\nUnexpected transfer type, got '%s'.")

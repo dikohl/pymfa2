@@ -18,6 +18,7 @@ class EntropyCalc(object):
 
         self.timeIndices = system.timeIndices
         self.conversions = dict()
+        self.addedSubstanceFlows = [0]*len(self.timeIndices)
 
         #get the mean of every flow in the simulation
         self.flowValues = {}
@@ -29,14 +30,13 @@ class EntropyCalc(object):
         self.concentrationValues = substanceConcentration
         self.metadataMatrix = system.metadataMatrix
         
-    def computeSingleStage(self, materialFlows):
-
+    def computeSingleStage(self, materialFlows, stageNum):
 
         stageResults = dict()
-
+        concentrationMatrix = dict()
         substanceFlowMatrix = []
         materialFlowMatrix = []
-        concentrationMatrix = dict()
+
         for flow in materialFlows:
             if '' not in flow[1:3]:
                 nodeName = (flow[1] + "_" +
@@ -46,23 +46,26 @@ class EntropyCalc(object):
                             flow[5] + "_" +
                             flow[6]).lower()
                 materialFlowValue = self.convertUnits([nodeName] + [targName] + self.flowValues[nodeName, targName][0])
-                concentrationValue = self.concentrationValues[nodeName, targName]
+                concentrationValue = self.concentrationValues.get((nodeName, targName),[nodeName] + [targName] +
+                                                                  [0]*(len(materialFlowValue)-2))
                 substanceFlowValue = []
 
-                for i in range(len(materialFlowValue[1:])):
+                for i in range(len(materialFlowValue[2:])):
                     # find substanceFlow by multiplying materialFlow and concentration
-                    substanceFlowValue[i] = np.multiply(materialFlowValue[i+2], concentrationValue[i+2])
+                    substanceFlowValue.append(np.multiply(materialFlowValue[i+2], concentrationValue[i+2]))
                 substanceFlowMatrix.append(substanceFlowValue)
                 materialFlowMatrix.append(materialFlowValue)
                 concentrationMatrix[nodeName, targName] = concentrationValue
         print(substanceFlowMatrix)
 
+        sumSubstanceFlows = []
         for i in range(len(substanceFlowMatrix[0])):
             allMi = dict()
             allHIIi = dict()
+            substanceFlowPeriod = [sub[i] for sub in substanceFlowMatrix]
+            sumSubstanceFlowsPeriod = np.sum(substanceFlowPeriod)
             for flow in materialFlowMatrix:
-                substanceFlowPeriod = [substanceFlowMatrix[i] for sub in substanceFlowMatrix]
-                mi = np.true_divide(flow[i+2], np.sum(substanceFlowPeriod))
+                mi = np.true_divide(flow[i+2], sumSubstanceFlowsPeriod+self.addedSubstanceFlows[i])
                 allMi[flow[0], flow[1]] = mi
             for flow in materialFlowMatrix:
                 #throw error if concentration is not known
@@ -70,13 +73,14 @@ class EntropyCalc(object):
                     raise EntropyException("Concentration for ... is missing")
                 concentration = concentrationMatrix[flow[0], flow[1]][i]
 
-
                 mi = allMi[flow[0], flow[1]]
                 tmp = np.multiply(-mi,concentration)
                 HIIi = np.multiply(tmp, np.log2(concentration))
                 allHIIi[flow[0],flow[1]] = HIIi
             periodStageEntropy = np.true_divide(sum(list(allHIIi.values())), self.Hmax)
             stageResults[self.timeIndices[i]] = periodStageEntropy
+            sumSubstanceFlows.append(sumSubstanceFlowsPeriod)
+        self.addedSubstanceFlows = [x + y for x, y in zip(self.addedSubstanceFlows, sumSubstanceFlows)]
         return stageResults
     
     #sort the metadata according to it's stages
@@ -110,9 +114,10 @@ class EntropyCalc(object):
                     stages[mStage] = [metadata]
         #for every stage of stages calculate entropy
 
-        for key in stages.keys():
-            stageResult = self.computeSingleStage(stages[key])
-            results[key] = stageResult
+
+        for key in range(len(stages)):
+            stageResult = self.computeSingleStage(stages[key+1], key+1)
+            results[key+1] = stageResult
         print(results)
         return results
                 

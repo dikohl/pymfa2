@@ -35,10 +35,9 @@ class Runner(object):
         exporter = CSVExporter()
         importer = CSVImporter()
         try:
-            system = importer.load(self.inFileName)
+            system, concentration = importer.load(self.inFileName)
             simulator = system.run()
-            EntropyCalc(system, simulator)
-            #simulator??system?? = entropy.run
+            EntropyCalc(system, simulator, concentration).run()
             exporter.export(self.outFileName, system, simulator)
         except CSVParserException as e:
             return e.error

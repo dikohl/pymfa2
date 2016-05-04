@@ -76,6 +76,7 @@ class System(object):
     self.median = False
     self.percentiles = []
     self.entropy = False
+    self.Hmax = -99
     self.timeSpanPlots = []
     self.timeIndices = []
     self.nodes = {}
@@ -152,7 +153,6 @@ class System(object):
                "target node: %s")
                % (self.inflows[node].nodeName, targ))
       self.dpmfaSinglePeriodInflows[node] = []
-      print(srcNode.inflows)
       for i in range(len(srcNode.inflows)):
         if srcNode.inflows[i][0] == "fix":
           self.dpmfaSinglePeriodInflows[node].append(

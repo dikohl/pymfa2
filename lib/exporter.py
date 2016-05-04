@@ -78,7 +78,7 @@ class CSVExporter(object):
                         padding + [""] + timeIndices)
     linkHeader = (["Transfer Type", "SourceNode", "SourceMaterial",
                         "SourceUnit", "DestinationNode", "DestinationMaterial",
-                        "DestinationUnit", "Description", ""] + timeIndices)
+                        "DestinationUnit", "Stages","Description", ""] + timeIndices)
 
 
     # log flow data from flow compartments

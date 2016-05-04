@@ -10,96 +10,122 @@ import numpy as np
 
 class EntropyCalc(object):
     #initiate EntropyCalc with the values of all the material flows, substance flows and concentrations
-    def __init__(self, system, simulator):
-        #self.Hmax = ld(1/earthcrust concentration)
-        
+    def __init__(self, system, simulator, substanceConcentration):
+
+        self.Hmax = system.Hmax
+
+        self.shouldCalculate = system.entropy
+
+        self.timeIndices = system.timeIndices
+        self.conversions = dict()
+
         #get the mean of every flow in the simulation
         self.flowValues = {}
         for comp in simulator.flowCompartments:
           for key in list(comp.outflowRecord.keys()):
             self.flowValues[comp.name, key] = []
             self.flowValues[comp.name, key].append(np.mean(comp.outflowRecord[key], axis=0).tolist())
-            
+
+        self.concentrationValues = substanceConcentration
         self.metadataMatrix = system.metadataMatrix
         
-    def computeSingleStage(self, materialFlows, concentrations, firstValue):
-        
-        #convert units so that all are the same
-        #!!!!!!flowValue = self.convertUnits(conversions, flowValue, firstValue)!!!!!!
+    def computeSingleStage(self, materialFlows):
 
-        substanceFlowValues = dict()
-        for flow in MaterialFlows:
-            nodeName = (flow[1] + "_" +
-                        flow[2] + "_" +
-                        flow[3]).lower()
-            targName = (flow[4] + "_" +
-                        flow[5] + "_" +
-                        flow[6]).lower()
-            flowValue = self.flowValues[nodeName, targName][0]
-            concentrationValue = self.concentrationValues[nodeName, targName]
-            substanceFlowValue = []
-            for i in range(len(flowValue)):
-                # find substanceFlow by materialFlow * concentration
-                substanceFlowValue[i] = np.multiply(flowValue[i], concentrationValue[i])
-            substanceFlowValues[nodeName, targName] =  substanceFlowValue
 
-        allMi = dict()
-        allHIIi = dict()
-        for material, flow in materialFlows.items():
-            mi = np.true_divide(flow, np.sum(list(substanceFlow.values())))
-            allMi[material] = mi
-            
-        for material, mi in allMi.items():
-            #concentration needs to be converted from 1% to 0.01
-            c = concentrations[material]
-            mi = allMi[material]
-            tmp = np.multiply(-mi,c)
-            HIIi = np.multiply(tmp,np.log2(c))
-            allHIIi[material] = HIIi
-        
-        entropy = np.true_divide(sum(list(allHIIi.values())), self.Hmax)
-        return entropy
+        stageResults = dict()
+
+        substanceFlowMatrix = []
+        materialFlowMatrix = []
+        concentrationMatrix = dict()
+        for flow in materialFlows:
+            if '' not in flow[1:3]:
+                nodeName = (flow[1] + "_" +
+                            flow[2] + "_" +
+                            flow[3]).lower()
+                targName = (flow[4] + "_" +
+                            flow[5] + "_" +
+                            flow[6]).lower()
+                materialFlowValue = self.convertUnits([nodeName] + [targName] + self.flowValues[nodeName, targName][0])
+                concentrationValue = self.concentrationValues[nodeName, targName]
+                substanceFlowValue = []
+
+                for i in range(len(materialFlowValue[1:])):
+                    # find substanceFlow by multiplying materialFlow and concentration
+                    substanceFlowValue[i] = np.multiply(materialFlowValue[i+2], concentrationValue[i+2])
+                substanceFlowMatrix.append(substanceFlowValue)
+                materialFlowMatrix.append(materialFlowValue)
+                concentrationMatrix[nodeName, targName] = concentrationValue
+        print(substanceFlowMatrix)
+
+        for i in range(len(substanceFlowMatrix[0])):
+            allMi = dict()
+            allHIIi = dict()
+            for flow in materialFlowMatrix:
+                substanceFlowPeriod = [substanceFlowMatrix[i] for sub in substanceFlowMatrix]
+                mi = np.true_divide(flow[i+2], np.sum(substanceFlowPeriod))
+                allMi[flow[0], flow[1]] = mi
+            for flow in materialFlowMatrix:
+                #throw error if concentration is not known
+                if (flow[0], flow[1]) not in concentrationMatrix:
+                    raise EntropyException("Concentration for ... is missing")
+                concentration = concentrationMatrix[flow[0], flow[1]][i]
+
+
+                mi = allMi[flow[0], flow[1]]
+                tmp = np.multiply(-mi,concentration)
+                HIIi = np.multiply(tmp, np.log2(concentration))
+                allHIIi[flow[0],flow[1]] = HIIi
+            periodStageEntropy = np.true_divide(sum(list(allHIIi.values())), self.Hmax)
+            stageResults[self.timeIndices[i]] = periodStageEntropy
+        return stageResults
     
     #sort the metadata according to it's stages
     def run(self):
+        results = dict()
+        if not self.shouldCalculate:
+            return results
         #get the conversion from one unit to another
-        conversions = dict()
-        for i in range(len(system.metadataMatrix)):
-            if self.metadataMatrix[i][0].lower() == 'conversion' and flowValue[2] == flowValue[5]:
-                nodeName = (self.metadataMatrix[i][1] + "_" +
-                            self.metadataMatrix[i][2] + "_" +
-                            self.metadataMatrix[i][3]).lower()
-                targName = (self.metadataMatrix[i][4] + "_" +
-                            self.metadataMatrix[i][5] + "_" +
-                            self.metadataMatrix[i][6]).lower()
-                conversion[self.flowValue[3]] = self.flowValues[nodeName, targName][0]
-                self.metadataMatrix.remove(self.metadataMatrix[i])
+        for i in range(len(self.metadataMatrix)):
+            if self.metadataMatrix[i][0].lower() == 'conversion' and self.metadataMatrix[i][2] == self.metadataMatrix[i][5]:
+                if '' not in self.metadataMatrix[i][1:3]:
+                    nodeName = (self.metadataMatrix[i][1] + "_" +
+                                self.metadataMatrix[i][2] + "_" +
+                                self.metadataMatrix[i][3]).lower()
+                    targName = (self.metadataMatrix[i][4] + "_" +
+                                self.metadataMatrix[i][5] + "_" +
+                                self.metadataMatrix[i][6]).lower()
+                    self.conversions[self.metadataMatrix[i][3], self.metadataMatrix[i][6]] = self.flowValues[nodeName, targName][0]
+                    self.metadataMatrix.remove(self.metadataMatrix[i])
         
         #order flows by stages
         stages = dict()
-        concStages = dict()
-        for metadata in metadataMatrix:
-            flowStages = metadata[-2].split('|')
+        for metadata in self.metadataMatrix:
+            metadataStages = metadata[-2].split('|')
 
             #every other flow is added to the correct stage
-            else:
-                for fstage in flowStages:
-                    if stages[fstage]:
-                        stages[fstage].append(flowValue)
-                    else:
-                        stages[fstage] = [flowValue]
+            for mStage in metadataStages:
+                if mStage in stages:
+                    stages[mStage].append(metadata)
+                else:
+                    stages[mStage] = [metadata]
         #for every stage of stages calculate entropy
-        results = dict()
+
         for key in stages.keys():
-            stageResult = self.computeSingleStage(stages[key], concStages[key])
+            stageResult = self.computeSingleStage(stages[key])
             results[key] = stageResult
+        print(results)
         return results
                 
-    def convertUnits(self, conversions, flowValue, firstValue):
-        if flowValue[3] in conversions.keys():
-            conversion = conversions[flowValue[3]]
+    def convertUnits(self,flowValue):
+        nodeUnit = flowValue[0].split('_')[2]
+        targUnit = flowValue[1].split('_')[2]
+        if (nodeUnit, targUnit) in self.conversions:
+            conversion = self.conversions[nodeUnit, targUnit]
             for i in range(len(conversion)):
-                flowValue[i+firstValue] = np.multiply(conversion[i],flowValue[i+firstValue])
+                flowValue[i+2] = np.multiply(conversion[i],flowValue[i+2])
         return flowValue
         
-        
+class EntropyException(Exception):
+    def __init__(self, error):
+        self.error = error
+        # pass

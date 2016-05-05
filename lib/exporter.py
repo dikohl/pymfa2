@@ -19,7 +19,7 @@ import numpy as np
 
 
 class CSVExporter(object):
-  def export(self, outFileName, system, simulator):
+  def export(self, outFileName, system, simulator, entropyResult):
     """Returns a list (rows) of lists (row contents) containing all data."""
 
     runs = system.runs
@@ -215,6 +215,12 @@ class CSVExporter(object):
       if len(system.percentiles) != 0 and runs != 1:
         for j in range(len(system.percentiles)):
           table.append(stockPercentileRows[(i*len(system.percentiles))+j])
+
+    if system.entropy:
+        for timeIndex in timeIndices:
+            table.append(timeIndex)
+            for stage in entropyResult.keys():
+                table.append(["Stage " + stage, entropyResult[stage][timeIndex]])
     '''
     # save time span plots
     timeIDs = np.array(timeIndices)

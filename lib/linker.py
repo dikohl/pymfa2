@@ -75,8 +75,6 @@ class System(object):
     self.periods = -99
     self.median = False
     self.percentiles = []
-    self.entropy = False
-    self.Hmax = -99
     self.timeSpanPlots = []
     self.timeIndices = []
     self.nodes = {}
@@ -85,7 +83,11 @@ class System(object):
     self.delays = {}
     self.sinks = {}
     self.links = []
+    self.entropy = False
+
+    self.Hmax = -99
     self.metadataMatrix = []
+    self.entropyInflows = []
     
 
   def run(self):
@@ -400,6 +402,8 @@ class System(object):
     
     # run Monte-Carlo simulation process
     simulator.runSimulation()
+
+    self.entropyInflows = dpmfaModel.getInflows()
     
     return simulator
 

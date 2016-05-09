@@ -117,6 +117,14 @@ class Model(object):
         else:
             print('not an external inflow')
 
+    def getInflows(self):
+        """
+        Gets all external Inflows
+        :return: list of inflows
+        """
+
+        return self.inflows
+
     def updateCompartmentCategories(self):
         '''
         updates the category list of the model to contain all compartments

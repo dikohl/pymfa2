@@ -46,9 +46,9 @@ class CSVExporter(object):
         break
       i -= 1
     if pathEnd != 0:
-      path = outFileName[:pathEnd]+"output/plots"
+      path = outFileName[:pathEnd]+"analysis"
     else:
-      path = "output/plots"
+      path = "analysis"
     '''
 
     # x stands for the number of rows per node
@@ -114,7 +114,7 @@ class CSVExporter(object):
 
     # creating data rows for links
     for i in range(len(system.metadataMatrix)):
-      if system.metadataMatrix[i][0].lower() == "inflow":
+      if system.metadataMatrix[i][0].lower() == "inflow" or system.metadataMatrix[i][0].lower() == "concentration":
         continue
       else:
         nodeName = (system.metadataMatrix[i][1] + "_" +
@@ -217,10 +217,8 @@ class CSVExporter(object):
           table.append(stockPercentileRows[(i*len(system.percentiles))+j])
 
     if system.entropy:
-        for timeIndex in timeIndices:
-            table.append(timeIndex)
-            for stage in entropyResult.keys():
-                table.append(["Stage " + stage, entropyResult[stage][timeIndex]])
+        table = self.exportEntropy(table,timeIndices,entropyResult)
+
     '''
     # save time span plots
     timeIDs = np.array(timeIndices)
@@ -414,5 +412,13 @@ class CSVExporter(object):
                        quotechar='"', quoting=csv.QUOTE_MINIMAL)
         w.writerows(table)
     return
+
+  def exportEntropy(self, table, timeIndices, entropyResult):
+    table.append(["Entropy"])
+    for timeIndex in timeIndices:
+        table.append(["Period", timeIndex])
+        for stage in entropyResult.keys():
+            table.append(["Stage " + str(stage), entropyResult[stage][timeIndex]])
+    return table
     
     

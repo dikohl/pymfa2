@@ -78,11 +78,9 @@ class CSVImporter(object):
                 # if we are in the description row, we can count the years (periods) if we didn't define them in the header
                 if metadata[0].lower().replace(" ", "") == "transfertype":
                     self.checkForTimeIndex(values)
-                # if we get extra information for the calcualtion of the entropy
-                elif self.system.entropy and metadata[0].lower().replace(" ", "") == "entropy":
-                    self.checkAndHandleEntropyData(metadata, values)
                 # the other rows contain data (but we ignore empty rows) relevant for the Matflow calculation
                 else:
+                    self.checkAndHandleEntropyData(metadata, values)
                     self.checkAndHandleData(row, metadata, description, values)
 
                 # if metadata is missing information (TargetMaterial and TargetUnit) get it from the sourceMaterial and sourceUnit
@@ -1035,10 +1033,10 @@ class CSVImporter(object):
 
     def checkAndHandleEntropyData(self, metadata, values):
         # if the value is for entropy calculation add it to the concentrations
-        if metadata[0] == "concentration":
+        if metadata[0].lower() == "concentration":
             cleanValues = []
             for c, v in enumerate(values):
-                if v > 1 or v < 0:
+                if float(v) > 1 or float(v) < 0:
                     raise CSVParserException(
                         ("row %d, col %s:\nThe concentration value for the entropy calculation " +
                          "got '%s'. Please enter a concentration between 1 and 0")

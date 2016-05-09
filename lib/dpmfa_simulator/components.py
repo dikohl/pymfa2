@@ -911,6 +911,9 @@ class FixedValueInflow(SinglePeriodInflow):
         super(FixedValueInflow, self).__init__()
         self.currentValue = value
 
+    def getValue(self):
+        return self.currentValue
+
 
 
 
@@ -965,6 +968,8 @@ class ExternalListInflow(ExternalInflow):
 #                self.inflowList[i] = SinglePeriodInflow(self.inflowList[i])
                 self.inflowList[i] = FixedValueInflow(self.inflowList[i])
 
+    def __repr__(self):
+        return(str(self.inflowList[0].currentValue))
 
         
     def getCurrentInflow(self, period = 0):
@@ -1045,6 +1050,8 @@ class ExternalFunctionInflow(ExternalInflow):
             #                   period-self.startDelay)*self.derivationFactor
             returnValue = self.inflowFunction(self.baseValue, 
                             period-self.startDelay)*self.derivationFactor
+            print(self.inflowFunction(self.baseValue,period-self.startDelay))
+            print(self.derivationFactor)
             if returnValue >= 0:
                 return returnValue
             else:

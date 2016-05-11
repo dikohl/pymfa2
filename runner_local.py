@@ -20,6 +20,7 @@ import sys
 from os.path import splitext
 from lib.importer import CSVImporter
 from lib.exporter import CSVExporter
+from lib.entropy import EntropyCalc
 
 inFileName = sys.argv[1]
 outFileName = sys.argv[2]
@@ -48,11 +49,12 @@ if not exporter:
 importer = CSVImporter()
 
 print("loading input file...")
-system = importer.load(inFileName)
+system,concentration = importer.load(inFileName)
 print("running analysis...")
 simulator = system.run()
-
+print("calculating entropy (if Hmax was specified)...")
+entropyResult = EntropyCalc(system, simulator, concentration).run()
 print("writing results...")
-exporter.export(outFileName, system, simulator)
+exporter.export(outFileName, system, simulator, entropyResult)
 
 print("All done.")

@@ -31,25 +31,6 @@ class CSVExporter(object):
     
     # get path to outFile to save the plots there
     path = outFileName[0:outFileName.find('out+')]
-    
-    '''
-    # get path to outFile to save the plots there
-    path = ''
-    pathEnd = 0
-    i = -1
-    while i >= len(outFileName)*(-1):
-      if outFileName[i] == "":
-        pathEnd = i
-        print("pathEnd: "+str(i) + ", outFileName[i]: "+outFileName[i])
-        print("pathEnd: "+str(i+1) + ", outFileName[i+1]: "+outFileName[i+1])
-        print("pathEnd: "+str(i-1) + ", outFileName[i-1]: "+outFileName[i-1])
-        break
-      i -= 1
-    if pathEnd != 0:
-      path = outFileName[:pathEnd]+"analysis"
-    else:
-      path = "analysis"
-    '''
 
     # x stands for the number of rows per node
     # minus the number of percentile rows
@@ -402,7 +383,7 @@ class CSVExporter(object):
               plt.legend(loc=2, fontsize='x-small')
             else:
               plt.plot(timeIDs, totalOutflows[0], color='0.3', lw=1)
-            plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)
+            plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)tt
             plt.close()
             
       print("\n")
@@ -413,6 +394,7 @@ class CSVExporter(object):
         w.writerows(table)
     return
 
+#adds the entropy results to the table that is later printed to the ourput file
   def exportEntropy(self, table, timeIndices, entropyResult):
     table.append(["Entropy"])
     for timeIndex in timeIndices:

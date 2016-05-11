@@ -307,43 +307,6 @@ class CSVImporter(object):
             return True
         return False
 
-    # check and log input for 'entropy'
-    def checkForEntropyHmax(self, row):
-        if not self.haveEntropy:
-            if row[0].lower().replace(" ", "") == "entropyhmax:":
-                if len(row[1]) == 0 or float(row[1]) == 0:
-                    pass
-                elif float(row[1]) >= 0:
-                    self.system.entropy = True
-                    self.system.Hmax = float(row[1])
-                else:
-                    raise CSVParserException(
-                        ("row %d, col %s:\nWrong input for 'entropy:', got '%s'. " +
-                         "\nHere, you can choose, if you want to display the " +
-                         "entropy values in the result file.\nFor the inputs " +
-                         "'0', 'n', 'no', 'none' or an empty cell no entropy "
-                         "will be displayed. For the inputs '1', 'y' or 'yes' " +
-                         "the entropy values will be displayed.")
-                        % (self.rowNumber, self.colString(1), row[1]))
-
-
-            else:
-                raise CSVParserException(
-                    ("row %d: Sixth non-comment row not containing " +
-                     "information about the entropy values.\nPlease enter " +
-                     "'entropy:' into column %s. With an input in column %s " +
-                     "you can choose, if you want to display the " +
-                     "entropy values in the result file.\nFor the inputs " +
-                     "'0', 'n', 'no', 'none' or an empty cell no entropy "
-                     "will be displayed. For the inputs '1', 'y' or 'yes' " +
-                     "the entropy values will be displayed.")
-                    % (self.rowNumber, self.colString(0), self.colString(1)))
-
-            self.rowNumber += 1
-            self.haveEntropy = True
-            return True
-        return False
-
     # check if enough columns in the file
     def checkNumberOfColumns(self, row):
         if not self.system.timeIndices and len(row) < 11:
@@ -1031,24 +994,6 @@ class CSVImporter(object):
 
         return splittedValues
 
-    def checkAndHandleEntropyData(self, metadata, values):
-        # if the value is for entropy calculation add it to the concentrations
-        if metadata[0].lower() == "concentration":
-            cleanValues = []
-            for c, v in enumerate(values):
-                if float(v) > 1 or float(v) < 0:
-                    raise CSVParserException(
-                        ("row %d, col %s:\nThe concentration value for the entropy calculation " +
-                         "got '%s'. Please enter a concentration between 1 and 0")
-                        % (self.rowNumber, self.colString(self.valuesOffset + c), v))
-            nodeName = (metadata[1] + "_" +
-                        metadata[2] + "_" +
-                        metadata[3]).lower()
-            targName = (metadata[4] + "_" +
-                        metadata[5] + "_" +
-                        metadata[6]).lower()
-
-            self.concentrationEntropy[nodeName, targName] = values
 
     # create nodes from metadata and read data
     def createNodes(self, transferType, src, srcMaterial, srcUnit, dst, dstMaterial, dstUnit, colTransferType, colSrc,
@@ -1237,6 +1182,65 @@ class CSVImporter(object):
             s += chr((n - 1) % 26 + 65)
             n //= 27
         return s[::-1]
+
+
+    def checkAndHandleEntropyData(self, metadata, values):
+        # if the value is for entropy calculation add it to the concentrations
+        if metadata[0].lower() == "concentration":
+            for c, v in enumerate(values):
+                if float(v) > 1 or float(v) < 0:
+                    raise CSVParserException(
+                        ("row %d, col %s:\nThe concentration value for the entropy calculation " +
+                         "got '%s'. Please enter a concentration between 1 and 0")
+                        % (self.rowNumber, self.colString(self.valuesOffset + c), v))
+            srcName = (metadata[1] + "_" +
+                        metadata[2] + "_" +
+                        metadata[3]).lower()
+            targName = (metadata[4] + "_" +
+                        metadata[5] + "_" +
+                        metadata[6]).lower()
+
+            self.concentrationEntropy[srcName, targName] = values
+
+    # check and log input for 'entropyHmax'
+    def checkForEntropyHmax(self, row):
+        if not self.haveEntropy:
+            #if Hmax is equal to 0, don't calculate the entropy
+            if row[0].lower().replace(" ", "") == "entropyhmax:":
+                if len(row[1]) == 0 or float(row[1]) == 0:
+                    pass
+                elif float(row[1]) >= 0:
+                    #if Hmax is a value > 0 calculate the entropy and set Hmax in the system
+                    self.system.entropy = True
+                    self.system.Hmax = float(row[1])
+                else:
+                    raise CSVParserException(
+                        ("row %d, col %s:\nWrong input for 'entropy:', got '%s'. " +
+                         "\nHere, you can choose, if you want to display the " +
+                         "entropy values in the result file.\nFor the inputs " +
+                         "'0', 'n', 'no', 'none' or an empty cell no entropy "
+                         "will be displayed. For the inputs '1', 'y' or 'yes' " +
+                         "the entropy values will be displayed.")
+                        % (self.rowNumber, self.colString(1), row[1]))
+
+
+            else:
+                raise CSVParserException(
+                    ("row %d: Sixth non-comment row not containing " +
+                     "information about the entropy values.\nPlease enter " +
+                     "'entropy:' into column %s. With an input in column %s " +
+                     "you can choose, if you want to display the " +
+                     "entropy values in the result file.\nFor the inputs " +
+                     "'0', 'n', 'no', 'none' or an empty cell no entropy "
+                     "will be displayed. For the inputs '1', 'y' or 'yes' " +
+                     "the entropy values will be displayed.")
+                    % (self.rowNumber, self.colString(0), self.colString(1)))
+
+            self.rowNumber += 1
+            self.haveEntropy = True
+            return True
+        return False
+
 
 class CSVParserException(Exception):
     def __init__(self, error):

@@ -394,7 +394,7 @@ class CSVExporter(object):
         w.writerows(table)
     return
 
-#adds the entropy results to the table that is later printed to the ourput file
+#adds the entropy results to the table that is later printed to the output file
   def exportEntropy(self, table, timeIndices, entropyResult):
     table.append(["Entropy"])
     for timeIndex in timeIndices:

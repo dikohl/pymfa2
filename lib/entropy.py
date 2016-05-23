@@ -17,8 +17,6 @@ class EntropyCalc(object):
     #initiate EntropyCalc with the values of all the material flows, substance flows and concentrations
     def __init__(self, system, simulator, substanceConcentration):
 
-
-
         self.Hmax = system.Hmax
 
         self.shouldCalculate = system.entropy

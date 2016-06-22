@@ -229,8 +229,13 @@ def mapCreationDate(outputs):
     outputsDate = dict()
     for output in outputs:
         #split filename from folder name
-        date, out = output.split('/')
-        #get rid of marker at the beginning of fthe ilename
+        try:
+           date, out = output.split('/')
+        except ValueError:
+           logging.warn("Could not split output: %s", output)
+           continue
+        
+        #get rid of marker at the beginning of the filename
         out = out[4:]
         #format the folder name so we get a proper date
         date = date.replace('+', ':')

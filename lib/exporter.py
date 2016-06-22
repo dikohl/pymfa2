@@ -54,7 +54,7 @@ class CSVExporter(object):
 
     # prepare header rows:
     padding = ["","","",""]
-    startPadding = ["", "", "", "", "", "", "", ""]
+    startPadding = ["", "", "", "", "", "", "", "", ""]
     stockHeader = (["Node Type", "Node Name", "Material", "Unit"] +
                         padding + [""] + timeIndices)
     linkHeader = (["Transfer Type", "SourceNode", "SourceMaterial",

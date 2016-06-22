@@ -69,17 +69,24 @@ class ReleaseFunction(object):
         """
         par = self.parameters
         if len(par) == 2:   # loc = 0
-            c = par[0]
-            scale = par[1]
-            frozenWeib = st.exponweib(1, c, 0, scale)
-            rate = 0.5*(frozenWeib.pdf(period-0.5)-frozenWeib.pdf(period))+frozenWeib.pdf(period)
+            if period ==0:
+                   rate = 0
+            else:
+                c = par[0]
+                scale = par[1]
+                frozenWeib = st.exponweib(1, c, 0, scale)
+                rate = 0.5*(frozenWeib.pdf(period-0.5)-frozenWeib.pdf(period))+frozenWeib.pdf(period)
             return rate
-        elif len(self.parameters) == 3: # loc defined by user
-            c = par[0]
-            scale = par[1]
-            loc = par[2]
-            frozenWeib = st.exponweib(1, c, loc, scale)
-            rate = 0.5*(frozenWeib.pdf(period-0.5)-frozenWeib.pdf(period))+frozenWeib.pdf(period)
+            
+        elif len(par) == 3: # loc defined by user
+            if period ==0:
+                   rate = 0
+            else:
+                c = par[0]
+                scale = par[1]
+                loc = par[2]
+                frozenWeib = st.exponweib(1, c, loc, scale)
+                rate = 0.5*(frozenWeib.pdf(period-0.5)-frozenWeib.pdf(period))+frozenWeib.pdf(period)
             return rate
         else:
             print('ERROR:')

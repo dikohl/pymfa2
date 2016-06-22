@@ -288,7 +288,6 @@ class System(object):
 
           # create and log transfers and releases for every period
           for i in range(len(srcNode.transfers[targ])):
-              
             # create and log transfers
             if srcNode.transfers[targ][i][0] == "fix":
               functionList.append(af.fixedRate)

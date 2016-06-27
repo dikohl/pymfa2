@@ -53,7 +53,7 @@ class CSVExporter(object):
 
 
     # prepare header rows:
-    padding = ["","","",""]
+    padding = ["","","","",""]
     startPadding = ["", "", "", "", "", "", "", "", ""]
     stockHeader = (["Node Type", "Node Name", "Material", "Unit"] +
                         padding + [""] + timeIndices)
@@ -396,11 +396,14 @@ class CSVExporter(object):
 
 #adds the entropy results to the table that is later printed to the output file
   def exportEntropy(self, table, timeIndices, entropyResult):
-    table.append(["Entropy"])
-    for timeIndex in timeIndices:
-        table.append(["Period", timeIndex])
-        for stage in entropyResult.keys():
-            table.append(["Stage " + str(stage), entropyResult[stage][timeIndex]])
+    table.append(["Entropy"] + timeIndices)
+    for stage in entropyResult.keys():
+        table.append(["Stage " + str(stage)] + [entropyResult[stage][timeIndex] for timeIndex in timeIndices])
+    
+
+
+
+        
     return table
     
     

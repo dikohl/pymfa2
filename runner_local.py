@@ -26,7 +26,7 @@ inFileName = sys.argv[1]
 outFileName = sys.argv[2]
 
 def usage():
-  return ("usage: matflow-cli.py source.csv results.csv\n" +
+  return ("usage: runner_local.py source.csv results.csv\n" +
           "source.csv: path to the source file of an analysis.\n" +
           "results.csv: path to where the results should be stored.\n")
 

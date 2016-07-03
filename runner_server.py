@@ -30,6 +30,9 @@ class Runner(object):
     def __init__(self, inputFile, outputFile):
         self.inFileName = inputFile
         self.outFileName = outputFile
+        self.doPlot = 0
+        if '--plot' in sys.argv [1:]:
+            self.doPlot = 1
 
     def run(self):
         exporter = CSVExporter()
@@ -38,7 +41,8 @@ class Runner(object):
             system, concentration = importer.load(self.inFileName)
             simulator = system.run()
             entropyResult = EntropyCalc(system, simulator, concentration).run()
-            exporter.export(self.outFileName, system, simulator, entropyResult)
+ 
+            exporter.export(self.outFileName, system, simulator, entropyResult, self.doPlot)
         except CSVParserException as e:
             return e.error
         return ''

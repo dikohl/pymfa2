@@ -14,12 +14,11 @@ from io import BytesIO as StringIO
 import os
 import csv
 import numpy as np
-#import matplotlib.pyplot as plt
 
 
 
 class CSVExporter(object):
-  def export(self, outFileName, system, simulator, entropyResult):
+  def export(self, outFileName, system, simulator, entropyResult, doPlot):
     """Returns a list (rows) of lists (row contents) containing all data."""
 
     runs = system.runs
@@ -200,194 +199,196 @@ class CSVExporter(object):
     if system.entropy:
         table = self.exportEntropy(table,timeIndices,entropyResult)
 
-    '''
-    # save time span plots
-    timeIDs = np.array(timeIndices)
-    categories = simulator.getCategories()
+    if doPlot:
+        import matplotlib.pyplot as plt
+        # save time span plots
+        timeIDs = np.array(timeIndices)
+        categories = simulator.getCategories()
     
-    # fill system.timeSpanPlots with capitalized node names if it's empty
-    if system.timeSpanPlots != None and len(system.timeSpanPlots) == 0:
-      for node in categories:
-        splittedNode = str.split(node, " ")
-        capNode = (str.capitalize(split) for split in splittedNode)
-        capNode = " ".join(capNode)
-        system.timeSpanPlots.append(capNode)
+        # fill system.timeSpanPlots with capitalized node names if it's empty
+        if system.timeSpanPlots != None and len(system.timeSpanPlots) == 0:
+          for node in categories:
+            splittedNode = str.split(node, " ")
+            capNode = (str.capitalize(split) for split in splittedNode)
+            capNode = " ".join(capNode)
+            system.timeSpanPlots.append(capNode)
         
-    if system.timeSpanPlots != None and len(system.timeSpanPlots) != 0:
+        if system.timeSpanPlots != None and len(system.timeSpanPlots) != 0:
 
-      # create directory for saving the plots
-      if not os.path.exists(path):
-        os.makedirs(path)
+          # create directory for saving the plots
+          if not os.path.exists(path):
+            os.makedirs(path)
         
-      # calculate number of total plots (used for printing the progress)
-      lowerTimeSpanPlots = list(node.lower() for node in system.timeSpanPlots)
-      plotCounter = 0
-      for comp in simulator.compartments:
-        if comp.categories[0] in lowerTimeSpanPlots:
-          if comp.name in system.rates.keys():
-            if system.rates[comp.name].type != "conversion":
-              plotCounter += 1
-          elif comp.name in system.delays.keys():
-            plotCounter += 3
-          elif comp.name in system.sinks.keys():
-            plotCounter += 2
-          else:
-            plotCounter += 1
-              
-      plotNumber = 0  # used for printing the progress
-      lastIncrease = 0  # used for printing the progress
-      signsToPrint = 50  # used for printing the progress
-      if plotCounter == 1:
-        print("\n               creating " + str(plotCounter) + " plot...")
-      else:
-        print("\n               creating " + str(plotCounter) + " plots...")
-      print("0%                                              100%")
-
-      #save plots for nodes in system.timeSpanPlots (except conversions)
-      for comp in simulator.compartments:
-        if comp.categories[0] in lowerTimeSpanPlots and \
-                system.nodes[comp.name] != "conversion":
-                    
-          # capitalize the node category
-          splittedName = str.split(comp.categories[0], " ")
-          splittedName = (str.capitalize(n) for n in splittedName)
-          capitalizedName = " ".join(splittedName)
-          
-          # create plot for the node's inflows
-          plotNumber += 1
-          if signsToPrint != 0 and plotNumber-lastIncrease >= \
-             float(plotCounter)/signsToPrint:  # display progress
-            progress = \
-            int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
-            plotCounter -= 1
-            signsToPrint -= progress
-            lastIncrease += 1
-            print("|" * progress, end="")
-          xTicks = []
-          for i in range(len(timeIDs)):
-            if i % (int(len(timeIDs)/12)+1) == 0:
-              xTicks.append(str(timeIDs[i]))
-            else:
-              xTicks.append("")
-          plt.xticks(timeIDs, xTicks)
-          plt.xlabel('years')
-          material = ''
-          unit = ''
-          isDelay = False
-          isSink = False
-          if comp.name in system.rates.keys():
-            material = system.rates[comp.name].material
-            unit = system.rates[comp.name].unit
-          elif comp.name in system.delays.keys():
-            material = system.delays[comp.name].material
-            unit = system.delays[comp.name].unit
-            isDelay = True
-          elif comp.name in system.sinks.keys():
-            material = system.sinks[comp.name].material
-            unit = system.sinks[comp.name].unit
-            isSink = True
-          else:
-            print("could not generate plot for node '" +
-                  capitalizedName + "': node name not found.")
-            plt.close()
-            continue
-          plt.ylabel(material+' in '+unit)
-          plt.title(capitalizedName+'\nInflows')
-          for row in comp.inflowRecord:
-            if runs == 1:
-              plt.plot(timeIDs, row, color='0.3', lw=1)
-            else:
-              plt.plot(timeIDs, row, color='0.7', lw=0.1)
-          if runs != 1:
-            plt.plot(timeIDs, np.mean(comp.inflowRecord, axis=0), color='r',
-                     lw=1, label = "mean")
-            if system.median:
-              plt.plot(timeIDs, np.median(comp.inflowRecord, axis=0),
-                       color='b', lw=1, label="median")
-            if len(system.percentiles) != 0:
-              for i in range(len(system.percentiles)):
-                plt.plot(timeIDs, np.percentile(comp.inflowRecord,
-                         system.percentiles[i], axis=0), color='g', lw=1,
-                         label=str(system.percentiles[i])+"th perc.")
-            plt.legend(loc=2, fontsize='x-small')
-          plt.savefig(path + "/" + comp.name + " - inflows.png", dpi=300)
-          plt.close()
-            
-          # create plot for the node's inventory
-          if isDelay or isSink:
-            plotNumber += 1
-            if signsToPrint != 0 and plotNumber-lastIncrease >= \
-               float(plotCounter)/signsToPrint:  # display progress
-              progress = \
-              int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
-              plotCounter -= 1
-              signsToPrint -= progress
-              lastIncrease += 1
-              print("|" * progress, end="")
-            plt.xticks(timeIDs, xTicks)
-            plt.xlabel('years')
-            plt.ylabel(material+' in '+unit)
-            plt.title(capitalizedName+'\nInventory')
-            for row in comp.inventory:
-              if runs == 1:
-                plt.plot(timeIDs, row, color='0.3', lw=1)
+          # calculate number of total plots (used for printing the progress)
+          lowerTimeSpanPlots = list(node.lower() for node in system.timeSpanPlots)
+          plotCounter = 0
+          for comp in simulator.compartments:
+            if comp.categories[0] in lowerTimeSpanPlots:
+              if comp.name in system.rates.keys():
+                if system.rates[comp.name].type != "conversion":
+                  plotCounter += 1
+              elif comp.name in system.delays.keys():
+                plotCounter += 3
+              elif comp.name in system.sinks.keys():
+                plotCounter += 2
               else:
-                plt.plot(timeIDs, row, color='0.7', lw=0.1)
-            if runs != 1:
-              plt.plot(timeIDs, np.mean(comp.inventory, axis=0), color='r',
-                       lw=1, label = "mean")
-              if system.median:
-                plt.plot(timeIDs, np.median(comp.inventory, axis=0),
-                         color='b', lw=1, label="median")
-              if len(system.percentiles) != 0:
-                for i in range(len(system.percentiles)):
-                  plt.plot(timeIDs, np.percentile(comp.inventory,
-                           system.percentiles[i], axis=0), color='g', lw=1,
-                           label=str(system.percentiles[i])+"th perc.")
-              plt.legend(loc=2, fontsize='x-small')
-            plt.savefig(path + "/" + comp.name + " - inventory.png", dpi=300)
-            plt.close()
+                plotCounter += 1
               
-          # create plot for the node's outflows
-          if isDelay:
-            plotNumber += 1
-            if signsToPrint != 0 and plotNumber-lastIncrease >= \
-               float(plotCounter)/signsToPrint:  # display progress
-              progress = \
-              int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
-              plotCounter -= 1
-              signsToPrint -= progress
-              lastIncrease += 1
-              print("|" * progress, end="")
-            plt.xticks(timeIDs, xTicks)
-            plt.xlabel('years')
-            plt.ylabel(material+' in '+unit)
-            plt.title(capitalizedName+'\nOutflows')
-            totalOutflows = np.zeros((runs, periods))
-            for i in range(runs):
-              for targ in comp.outflowRecord.keys():
-                totalOutflows[i] += comp.outflowRecord[targ][i]
-            if runs > 1:
-              for row in totalOutflows:
-                plt.plot(timeIDs, row, color='0.7', lw=0.1)
-              plt.plot(timeIDs, np.mean(totalOutflows, axis=0), color='r',
-                       lw=1, label = "mean")
-              if system.median and runs != 1:
-                plt.plot(timeIDs, np.median(totalOutflows, axis=0),
-                         color='b', lw=1, label="median")
-              if len(system.percentiles) != 0 and runs != 1:
-                for i in range(len(system.percentiles)):
-                  plt.plot(timeIDs, np.percentile(totalOutflows,
-                           system.percentiles[i], axis=0), color='g', lw=1,
-                           label=str(system.percentiles[i])+"th perc.")
-              plt.legend(loc=2, fontsize='x-small')
-            else:
-              plt.plot(timeIDs, totalOutflows[0], color='0.3', lw=1)
-            plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)tt
-            plt.close()
+          plotNumber = 0  # used for printing the progress
+          lastIncrease = 0  # used for printing the progress
+          signsToPrint = 50  # used for printing the progress
+          if plotCounter == 1:
+            print("\n               creating " + str(plotCounter) + " plot...")
+          else:
+            print("\n               creating " + str(plotCounter) + " plots...")
+          print("0%                                              100%")
+
+          #save plots for nodes in system.timeSpanPlots (except conversions)
+          for comp in simulator.compartments:
+            if comp.categories[0] in lowerTimeSpanPlots and \
+                    system.nodes[comp.name] != "conversion":
+                    
+              # capitalize the node category
+              splittedName = str.split(comp.categories[0], " ")
+              splittedName = (str.capitalize(n) for n in splittedName)
+              capitalizedName = " ".join(splittedName)
+          
+              # create plot for the node's inflows
+              plotNumber += 1
+              if signsToPrint != 0 and plotNumber-lastIncrease >= \
+                 float(plotCounter)/signsToPrint:  # display progress
+                progress = \
+                int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
+                plotCounter -= 1
+                signsToPrint -= progress
+                lastIncrease += 1
+                print("|" * progress, end="")
+              xTicks = []
+              for i in range(len(timeIDs)):
+                if i % (int(len(timeIDs)/12)+1) == 0:
+                  xTicks.append(str(timeIDs[i]))
+                else:
+                  xTicks.append("")
+              plt.xticks(timeIDs, xTicks)
+              plt.xlabel('years')
+              material = ''
+              unit = ''
+              isDelay = False
+              isSink = False
+              if comp.name in system.rates.keys():
+                material = system.rates[comp.name].material
+                unit = system.rates[comp.name].unit
+              elif comp.name in system.delays.keys():
+                material = system.delays[comp.name].material
+                unit = system.delays[comp.name].unit
+                isDelay = True
+              elif comp.name in system.sinks.keys():
+                material = system.sinks[comp.name].material
+                unit = system.sinks[comp.name].unit
+                isSink = True
+              else:
+                print("could not generate plot for node '" +
+                      capitalizedName + "': node name not found.")
+                plt.close()
+                continue
+              plt.ylabel(material+' in '+unit)
+              plt.title(capitalizedName+'\nInflows')
+              for row in comp.inflowRecord:
+                if runs == 1:
+                  plt.plot(timeIDs, row, color='0.3', lw=1)
+                else:
+                  plt.plot(timeIDs, row, color='0.7', lw=0.1)
+              if runs != 1:
+                plt.plot(timeIDs, np.mean(comp.inflowRecord, axis=0), color='r',
+                         lw=1, label = "mean")
+                if system.median:
+                  plt.plot(timeIDs, np.median(comp.inflowRecord, axis=0),
+                           color='b', lw=1, label="median")
+                if len(system.percentiles) != 0:
+                  for i in range(len(system.percentiles)):
+                    plt.plot(timeIDs, np.percentile(comp.inflowRecord,
+                             system.percentiles[i], axis=0), color='g', lw=1,
+                             label=str(system.percentiles[i])+"th perc.")
+                plt.legend(loc=2, fontsize='x-small')
+              plt.savefig(path + "/" + comp.name + " - inflows.png", dpi=300)
+              plt.close()
             
-      print("\n")
-     '''          
+              # create plot for the node's inventory
+              if isDelay or isSink:
+                plotNumber += 1
+                if signsToPrint != 0 and plotNumber-lastIncrease >= \
+                   float(plotCounter)/signsToPrint:  # display progress
+                  progress = \
+                  int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
+                  plotCounter -= 1
+                  signsToPrint -= progress
+                  lastIncrease += 1
+                  print("|" * progress, end="")
+                plt.xticks(timeIDs, xTicks)
+                plt.xlabel('years')
+                plt.ylabel(material+' in '+unit)
+                plt.title(capitalizedName+'\nInventory')
+                for row in comp.inventory:
+                  if runs == 1:
+                    plt.plot(timeIDs, row, color='0.3', lw=1)
+                  else:
+                    plt.plot(timeIDs, row, color='0.7', lw=0.1)
+                if runs != 1:
+                  plt.plot(timeIDs, np.mean(comp.inventory, axis=0), color='r',
+                           lw=1, label = "mean")
+                  if system.median:
+                    plt.plot(timeIDs, np.median(comp.inventory, axis=0),
+                             color='b', lw=1, label="median")
+                  if len(system.percentiles) != 0:
+                    for i in range(len(system.percentiles)):
+                      plt.plot(timeIDs, np.percentile(comp.inventory,
+                               system.percentiles[i], axis=0), color='g', lw=1,
+                               label=str(system.percentiles[i])+"th perc.")
+                  plt.legend(loc=2, fontsize='x-small')
+                plt.savefig(path + "/" + comp.name + " - inventory.png", dpi=300)
+                plt.close()
+              
+              # create plot for the node's outflows
+              if isDelay:
+                plotNumber += 1
+                if signsToPrint != 0 and plotNumber-lastIncrease >= \
+                   float(plotCounter)/signsToPrint:  # display progress
+                  progress = \
+                  int((plotNumber-lastIncrease)/(float(plotCounter)/signsToPrint))
+                  plotCounter -= 1
+                  signsToPrint -= progress
+                  lastIncrease += 1
+                  print("|" * progress, end="")
+                plt.xticks(timeIDs, xTicks)
+                plt.xlabel('years')
+                plt.ylabel(material+' in '+unit)
+                plt.title(capitalizedName+'\nOutflows')
+                totalOutflows = np.zeros((runs, periods))
+                for i in range(runs):
+                  for targ in comp.outflowRecord.keys():
+                    totalOutflows[i] += comp.outflowRecord[targ][i]
+                if runs > 1:
+                  for row in totalOutflows:
+                    plt.plot(timeIDs, row, color='0.7', lw=0.1)
+                  plt.plot(timeIDs, np.mean(totalOutflows, axis=0), color='r',
+                           lw=1, label = "mean")
+                  if system.median and runs != 1:
+                    plt.plot(timeIDs, np.median(totalOutflows, axis=0),
+                             color='b', lw=1, label="median")
+                  if len(system.percentiles) != 0 and runs != 1:
+                    for i in range(len(system.percentiles)):
+                      plt.plot(timeIDs, np.percentile(totalOutflows,
+                               system.percentiles[i], axis=0), color='g', lw=1,
+                               label=str(system.percentiles[i])+"th perc.")
+                  plt.legend(loc=2, fontsize='x-small')
+                else:
+                  plt.plot(timeIDs, totalOutflows[0], color='0.3', lw=1)
+                plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)
+                plt.close()
+            
+          print("\n")
+    
+
     with open(outFileName, 'w') as f:
         w = csv.writer(f, delimiter=';', lineterminator='\n',
                        quotechar='"', quoting=csv.QUOTE_MINIMAL)

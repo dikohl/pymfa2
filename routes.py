@@ -230,7 +230,7 @@ def mapCreationDate(outputs):
     for output in outputs:
         #split filename from folder name
         try:
-           date, out = output.split('/')
+           date, out = os.path.split(output)
         except ValueError:
            logging.warn("Could not split output: %s", output)
            continue

@@ -55,6 +55,9 @@ simulator = system.run()
 print("calculating entropy (if Hmax was specified)...")
 entropyResult = EntropyCalc(system, simulator, concentration).run()
 print("writing results...")
-exporter.export(outFileName, system, simulator, entropyResult)
+doPlot = 0
+if '--plot' in sys.argv [1:]:
+    doPlot = 1
+exporter.export(outFileName, system, simulator, entropyResult, doPlot)
 
 print("All done.")

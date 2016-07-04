@@ -1,3 +1,4 @@
 bottle
 scipy
 numpy>=1.7
+matplotlib

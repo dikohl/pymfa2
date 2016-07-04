@@ -48,9 +48,11 @@ class EntropyCalc(object):
         if not self.shouldCalculate:
             return results
         # get the conversion from one unit to another
+        print(len(self.metadataMatrix))
         for i in range(len(self.metadataMatrix)):
-            if self.metadataMatrix[i][0].lower() == 'conversion' and self.metadataMatrix[i][2] == \
-                    self.metadataMatrix[i][5]:
+            
+            print(self.metadataMatrix[i])
+            if self.metadataMatrix[i][0].lower() == 'conversion':
                 srcName = (self.metadataMatrix[i][1] + "_" +
                             self.metadataMatrix[i][2] + "_" +
                             self.metadataMatrix[i][3]).lower()
@@ -60,6 +62,7 @@ class EntropyCalc(object):
                 self.conversions[self.metadataMatrix[i][3], self.metadataMatrix[i][6]] = \
                 self.flowValues[srcName, targName][0]
                 self.metadataMatrix.remove(self.metadataMatrix[i])
+                break
 
         # order flows by stages
         for metadata in self.metadataMatrix:
@@ -84,9 +87,11 @@ class EntropyCalc(object):
             allHIIi = dict()
             #sum all the substanceFloas in this stage and period
             substanceFlowPeriod = [sub[i] for sub in substanceFlowMatrix]
-            #if self.timeIndices[i] == 2012 and stage == 2:
-                #print(stage)
-                #print(substanceFlowMatrix)
+            if self.timeIndices[i] == 2012 and stage == 2:
+                print(stage)
+                print(materialFlowMatrix)
+                print("_______")
+                print(concentrationMatrix)
             sumSubstanceFlowsPeriod = np.sum(substanceFlowPeriod)
 
             #calculate the mi of the calculation
@@ -175,6 +180,7 @@ class EntropyCalc(object):
             conversion = self.conversions[nodeUnit, targUnit]
             for i in range(len(conversion)):
                 flowValue[i + 2] = np.multiply(conversion[i], flowValue[i + 2])
+        
         return flowValue
         
 class EntropyException(Exception):

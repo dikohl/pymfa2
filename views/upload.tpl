@@ -39,7 +39,7 @@
 	<div style="margin-top:30px;">
 		<label>Previous results:</label>
 		<table border="0">
-		%for output, date in outputs.items():
+		%for output, date in outputs:
 			<tr>
 				<td>
 					{{ output }} </br>

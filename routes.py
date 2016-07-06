@@ -226,27 +226,31 @@ def checkAndFixFormData(outputFile, upload):
         
 #maps the creation date to the output files
 def mapCreationDate(outputs):
-    outputsDate = dict()
+    outputsDate = []
     for output in outputs:
         #split filename from folder name
+        date = []
         try:
-           date, out = os.path.split(output)
+           print(output)
+           print(os.path.split(output))
+           date_list, out = os.path.split(output)
         except ValueError:
            logging.warn("Could not split output: %s", output)
            continue
-        
+        date.append(date_list)
         #get rid of marker at the beginning of the filename
         out = out[4:]
         #format the folder name so we get a proper date
-        date = date.replace('+', ':')
+        real_date = date[0].replace('+', ':')
         #if there are multiple output files with the same name append numbers to them
-        keys = outputsDate.keys()
-        if out in keys:
+        '''if out in keys:
             i = 1
             while out+" (" +str(i)+ ")" in keys:
                 i += 1
-            outputsDate[out+" (" +str(i)+ ")"] = date
+            outputsDate[out+" (" +str(i)+ ")"] = real_date
         else:
             #fill dictionary with outputname:creationDate
-            outputsDate[out] = date
-    return outputsDate
+            outputsDate[out] = real_date'''
+        
+        outputsDate.append((out,real_date))
+    return list(reversed(outputsDate))

@@ -200,9 +200,9 @@ def scanForOutputs():
         for f in files:
             #find the files that start with out+ in the different folders
             if 'out+' in f:
-                path = root+'/'+f
                 #get the file name without the path
-                outputs.append(path.split('/',1)[1])
+                folder, date = os.path.split(root)
+                outputs.append(date+"/"+f)
     return outputs
 
 #check the uploaded file and fix the outputFile name

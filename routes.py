@@ -231,8 +231,6 @@ def mapCreationDate(outputs):
         #split filename from folder name
         date = []
         try:
-           print(output)
-           print(os.path.split(output))
            date_list, out = os.path.split(output)
         except ValueError:
            logging.warn("Could not split output: %s", output)

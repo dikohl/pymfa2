@@ -18,7 +18,7 @@ import numpy as np
 
 
 class CSVExporter(object):
-  def export(self, outFileName, system, simulator, entropyResult, doPlot):
+  def export(self,outFileName,system,simulator,entropyResult,doPlot):
     """Returns a list (rows) of lists (row contents) containing all data."""
 
     runs = system.runs
@@ -197,7 +197,8 @@ class CSVExporter(object):
           table.append(stockPercentileRows[(i*len(system.percentiles))+j])
 
     if system.entropy:
-        table = self.exportEntropy(table,timeIndices,entropyResult)
+        print("done")
+        #table = self.exportEntropy(table,timeIndices,entropyResult)
 
     if doPlot:
         import matplotlib.pyplot as plt

@@ -14,13 +14,13 @@ It takes two arguments:
    (incl. file name and '.csv' ending)
 """
 
-
+from os.path import splitext
 
 import sys
-from os.path import splitext
-from lib.importer import CSVImporter
+
+from lib.entropy_calculation.entropy import EntropyCalc
 from lib.exporter import CSVExporter
-from lib.entropy import EntropyCalc
+from lib.importer import CSVImporter
 
 inFileName = sys.argv[1]
 outFileName = sys.argv[2]

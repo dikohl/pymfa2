@@ -17,14 +17,12 @@ modified by dikohl
 This runner is used serverside and was changed to be called after a new file was uploaded.
 """
 
-
-
 import sys
-import os
-from os.path import splitext
-from lib.importer import CSVImporter, CSVParserException
+
+from lib.entropy_calculation.entropy import Entropy, EntropyCalc
 from lib.exporter import CSVExporter
-from lib.entropy import EntropyCalc
+from lib.importer import CSVImporter, CSVParserException
+
 
 class Runner(object):
     def __init__(self, inputFile, outputFile):
@@ -40,9 +38,9 @@ class Runner(object):
         try:
             system, concentration = importer.load(self.inFileName)
             simulator = system.run()
-            entropyResult = EntropyCalc(system, simulator, concentration).run()
- 
+            entropyResult = EntropyCalc(Entropy(system, simulator, concentration))
             exporter.export(self.outFileName, system, simulator, entropyResult, self.doPlot)
+            #exporter.export(self.outFileName, system, simulator, self.doPlot)
         except CSVParserException as e:
             return e.error
         return ''

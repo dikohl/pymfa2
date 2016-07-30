@@ -4,6 +4,7 @@ __pycache__/
 
 # analysis
 /analysis
+/lib/entropy_calculation/entropy_old.py
 
 # PTVS analysis
 .ptvs/

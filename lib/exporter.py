@@ -12,6 +12,8 @@ csv file and creates plots of the material flows and stocks.
 
 from io import BytesIO as StringIO
 import os
+import zipfile
+import shutil
 import csv
 import numpy as np
 
@@ -385,6 +387,12 @@ class CSVExporter(object):
                   plt.plot(timeIDs, totalOutflows[0], color='0.3', lw=1)
                 plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)
                 plt.close()
+
+            ziph = zipfile.ZipFile('plots.zip', 'w', zipfile.ZIP_DEFLATED)
+            for root, dirs, files in os.walk(path):
+              for file in files:
+                ziph.write(os.path.join(root, file))
+            shutil.rmtree(path)
             
           print("\n")
     

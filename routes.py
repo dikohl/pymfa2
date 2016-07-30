@@ -135,10 +135,10 @@ def downloadFile():
                 </form>
                 '''
         if output == 'plots':
-            if os.path.exists('analysis/'+date+'plots'):
-                for root, dirs, files in os.walk('analysis/'+date+'plots'):
-                    for f in files:
-                        return static_file(date+'/plots/'+f, root='analysis', download=True)
+            for root, dirs, files in os.walk('analysis/'+date+'plots'):
+                for f in files:
+                    if f == 'plots.zip':
+                        return static_file(date+"/"+f, root='analysis', download=True)
             else:
                 return '''
                     This analysis does not have any plots.

@@ -1,20 +1,26 @@
 class Result:
     def __init__(self):
-        self.timeIndices = []
-        self.entropy = []
+        self.stageResults = dict()
+
+    def append(self,stageResult):
+        self.stageResults.setdefault(stageResult.stage, stageResult).append(stageResult)
 
     def __repr__(self):
-        return self.entropy
+        table = []
+        for key in self.stageResults.keys():
+            table.append(["Stage " + key] + self.stageResults[key])
+        return table
 
-    def __str__(self):
-        return self.entropy
+class StageResult:
+    def __init__(self,year,stage,entropyResult):
+        self.stage = stage
+        self.entropyResults = dict()
+        self.entropyResults[year] = entropyResult
 
-class PeriodResults:
-    def __init__(self):
-        self.stages = dict()
+    def append(self, stageResult):
+        for key in stageResult.entropyResults.keys():
+            #print("stage: " + str(self.stage) + " res: " + str(key) +" : "+ str(stageResult.entropyResults[key]))
+            self.entropyResults[key] = stageResult.entropyResults[key]
 
     def __repr__(self):
-        out = []
-        for key in self.stages.keys():
-            out.append(["Stage " + key]+[self.stages[key]])
-        return out
+        return [str(self.enropyResults[key]) for key in self.entropyResults.keys()]

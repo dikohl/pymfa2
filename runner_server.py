@@ -38,7 +38,7 @@ class Runner(object):
         try:
             system, concentration = importer.load(self.inFileName)
             simulator = system.run()
-            entropyResult = EntropyCalc(Entropy(system, simulator, concentration))
+            entropyResult = EntropyCalc(Entropy(system, simulator, concentration)).computeEntropy()
             exporter.export(self.outFileName, system, simulator, entropyResult, self.doPlot)
             #exporter.export(self.outFileName, system, simulator, self.doPlot)
         except CSVParserException as e:

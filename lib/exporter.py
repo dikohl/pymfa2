@@ -198,7 +198,7 @@ class CSVExporter(object):
 
     if system.entropy:
         print("done")
-        #table = self.exportEntropy(table,timeIndices,entropyResult)
+        table = self.exportEntropy(table,timeIndices,entropyResult)
 
     if doPlot:
         import matplotlib.pyplot as plt
@@ -399,13 +399,10 @@ class CSVExporter(object):
 #adds the entropy results to the table that is later printed to the output file
   def exportEntropy(self, table, timeIndices, entropyResult):
     table.append(["Entropy"] + timeIndices)
-    for stage in entropyResult.keys():
-        table.append(["Stage " + str(stage)] + [entropyResult[stage][timeIndex] for timeIndex in timeIndices])
-    
-
-
-
-        
+    keys = entropyResult.stageResults.keys()
+    for key in sorted(keys):
+      values = [entropyResult.stageResults[key].entropyResults[year] for year in sorted(entropyResult.stageResults[key].entropyResults.keys())]
+      table.append(["Stage " + key] + values)
     return table
     
     

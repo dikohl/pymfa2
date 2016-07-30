@@ -98,8 +98,8 @@ class EntropyCalc(object):
                         flow.HIIi = 0
                     else:
                         flow.HIIi = float(flow.concentration)*(-flow.Mi)*np.log2(float(flow.concentration))
-                    if period.year == 2012 and stage == "6" and flow.transferType.lower() == "delay":
-                        print(flow)
+                    #if period.year == 2012 and stage == "6" and flow.transferType.lower() == "delay":
+                    #    print(flow)
                 stageEntropy = stageObj.getHIIiSum()/self.entropy.Hmax
                 result.append(StageResult(period.year,stage,stageEntropy))
         return result

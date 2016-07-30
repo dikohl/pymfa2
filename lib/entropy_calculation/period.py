@@ -1,4 +1,6 @@
 from lib.entropy_calculation.stage import Stage
+
+
 class Period():
     def __init__(self,year):
         self.year = year

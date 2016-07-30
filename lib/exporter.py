@@ -27,9 +27,6 @@ class CSVExporter(object):
     timeIndices = system.timeIndices
     if periods < len(timeIndices):
       timeIndices = timeIndices[:periods]
-    
-    # get path to outFile to save the plots there
-    path = outFileName[0:outFileName.find('out+')]
 
     # x stands for the number of rows per node
     # minus the number of percentile rows
@@ -197,11 +194,13 @@ class CSVExporter(object):
           table.append(stockPercentileRows[(i*len(system.percentiles))+j])
 
     if system.entropy:
-        print("done")
         table = self.exportEntropy(table,timeIndices,entropyResult)
 
     if doPlot:
         import matplotlib.pyplot as plt
+        root, file = os.path.split(outFileName)
+        date, out = os.path.split(root)
+        path = os.path.join(date,"plots")
         # save time span plots
         timeIDs = np.array(timeIndices)
         categories = simulator.getCategories()

@@ -52,11 +52,18 @@
 						<button class="btn btn-primary" type="submit">Download</button>
 		  			</form>
 				</td>
-				<td style="padding:10px;">
+				<td style="padding-left:10px;">
 					<form action="/download" method="post" enctype="multipart/form-data">	
 						<input type="text" name="output" value='source' style="display:none;"/>
 						<input type="text" name="date" value={{ date }} style="display:none;"/>
 						<button type="submit" class="btn btn-success">Source</button>
+		  			</form>
+				</td>
+				<td style="padding:10px;">
+					<form action="/download" method="post" enctype="multipart/form-data">
+						<input type="text" name="output" value='plots' style="display:none;"/>
+						<input type="text" name="date" value={{ date }} style="display:none;"/>
+						<button type="submit" class="btn btn-warning">Plots</button>
 		  			</form>
 				</td>
 				<td>

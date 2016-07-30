@@ -1,5 +1,4 @@
 from lib.entropy_calculation.node import Node
-import numpy as np
 
 
 class Flow:

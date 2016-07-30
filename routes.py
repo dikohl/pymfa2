@@ -8,6 +8,8 @@ Routes and views for the bottle application.
 import sys, os, hashlib, time, datetime
 from bottle import route, view, request, response, redirect, os, static_file, abort
 from runner_server import Runner
+import shutil
+
 
 #first view of the website
 @route('/', method='GET')
@@ -79,7 +81,7 @@ def upload():
         #get current time and create a folder with that name
         creationTime = datetime.datetime.strftime(datetime.datetime.now(), '%d-%m-%Y_%H+%M+%S')
         save_path = 'analysis/' + creationTime
-        os.makedirs(save_path)
+        os.makedirs(save_path + "/out")
         
         #save the uploaded file to the directory
         upload.save(save_path) #appends upload.filename automatically
@@ -124,7 +126,7 @@ def downloadFile():
         if output == 'source':
             for root, dirs, files in os.walk('analysis/'+date):
                 for f in files:
-                    if f[0:4] != 'out+' and f[-4:] == '.csv':
+                    if f[-4:] == '.csv':
                         return static_file(date+'/'+f, root='analysis', download=True)
             return '''
                 This file does not exist anymore! Somebody must have deleted it.
@@ -132,13 +134,25 @@ def downloadFile():
                     <input type="submit" value="Ok"/>
                 </form>
                 '''
-            
-        #check if it is a duplicate outputFile name
+        if output == 'plots':
+            if os.path.exists('analysis/'+date+'plots'):
+                for root, dirs, files in os.walk('analysis/'+date+'plots'):
+                    for f in files:
+                        return static_file(date+'/plots/'+f, root='analysis', download=True)
+            else:
+                return '''
+                    This analysis does not have any plots.
+                    <form action="/upload" method="get">
+                        <input type="submit" value="Ok"/>
+                    </form>
+                    '''
+
+        ''''#check if it is a duplicate outputFile name
         if output[-1] == ')':
             #if so get rid of the number (everything after .csv)
-            output = output[0:output.find('.csv')+4]
+            output = output[0:output.find('.csv')+4]'''
         #create the full path to the outputfile
-        download = date + "/" + "out+" + output
+        download = date + "/" + "out/" + output
         #check if file is still there
         outputs = scanForOutputs()
         if download in outputs:
@@ -164,12 +178,8 @@ def deleteFile():
         #get the name of the folder that should be deleted
         date = request.forms.get('date')
         date = date.replace(':', '+')
-        #delete all the files in the folder
-        for root, dirs, files in os.walk('analysis/' + date):
-            for f in files:
-                os.remove(root+'/'+f)
-            #remove directory
-            os.rmdir(root)
+        #delete directory
+        shutil.rmtree('analysis/' + date)
         #redirect to the updated upload view
         return redirect("/upload")
     #if not redirect to login view
@@ -197,12 +207,10 @@ def scanForOutputs():
     outputs = []
     #scan the directory
     for root, dirs, files in os.walk('analysis'):
-        for f in files:
-            #find the files that start with out+ in the different folders
-            if 'out+' in f:
-                #get the file name without the path
-                folder, date = os.path.split(root)
-                outputs.append(date+"/"+f)
+        folder, date = os.path.split(root)
+        for root, dirs, files in os.walk(root + '/out'):
+            for f in files:
+                outputs.append(os.path.join(date,"out",f))
     return outputs
 
 #check the uploaded file and fix the outputFile name
@@ -222,7 +230,7 @@ def checkAndFixFormData(outputFile, upload):
         #fix the outputFile name if it does not end in .csv
         elif not outputFile.endswith(".csv"):
             outputFile = outputFile + ".csv"
-    return error, 'out+'+outputFile
+    return error, "out/"+outputFile
         
 #maps the creation date to the output files
 def mapCreationDate(outputs):
@@ -231,13 +239,12 @@ def mapCreationDate(outputs):
         #split filename from folder name
         date = []
         try:
-           date_list, out = os.path.split(output)
+           date_list_out, file = os.path.split(output)
+           date_list, out = os.path.split(date_list_out)
         except ValueError:
-           logging.warn("Could not split output: %s", output)
+           print("Could not split output: " +output)
            continue
         date.append(date_list)
-        #get rid of marker at the beginning of the filename
-        out = out[4:]
         #format the folder name so we get a proper date
         real_date = date[0].replace('+', ':')
         #if there are multiple output files with the same name append numbers to them
@@ -250,5 +257,5 @@ def mapCreationDate(outputs):
             #fill dictionary with outputname:creationDate
             outputsDate[out] = real_date'''
         
-        outputsDate.append((out,real_date))
+        outputsDate.append((file,real_date))
     return list(reversed(outputsDate))

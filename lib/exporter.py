@@ -198,15 +198,10 @@ class CSVExporter(object):
             w = csv.writer(f, delimiter=';', lineterminator='\n',
                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
             w.writerows(table)
-        f.close()
 
         if doPlot:
             self.exportPlots()
 
-        root, file = os.path.split(self.outFileName)
-        date, out = os.path.split(root)
-        path = os.path.join(date,"plots")
-        print(path)
         return
 
     # adds the entropy results to the table that is later printed to the output file
@@ -407,12 +402,17 @@ class CSVExporter(object):
                         plt.savefig(path + "/" + comp.name + " - outflows.png", dpi=300)
                         plt.close()
 
-                ziph = zipfile.ZipFile('plots.zip', 'w', zipfile.ZIP_DEFLATED)
+                ziph = zipfile.ZipFile(os.path.join(date,'plots.zip'), 'w', zipfile.ZIP_DEFLATED)
                 for root, dirs, files in os.walk(path):
                     for file in files:
-                        ziph.write(os.path.join(root, file))
+                        ziph.write(os.path.join(root, file), arcname=file)
                 ziph.close()
-                shutil.rmtree(path)
+                
+                if os.path.exists(path):
+                    for root, dirs, files in os.walk(path):
+                        for file in files:
+                            print(file)
+                #shutil.rmtree(path)
 
             print("\n")
         return

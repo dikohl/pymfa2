@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/lib/exporter.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="648">
-              <caret line="413" column="28" selection-start-line="413" selection-start-column="28" selection-end-line="413" selection-end-column="28" />
+              <caret line="409" column="16" selection-start-line="409" selection-start-column="16" selection-end-line="409" selection-end-column="16" />
               <folding>
                 <element signature="e#271#305#0" expanded="true" />
               </folding>
@@ -865,7 +865,7 @@
     <entry file="file://$PROJECT_DIR$/lib/exporter.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="648">
-          <caret line="413" column="28" selection-start-line="413" selection-start-column="28" selection-end-line="413" selection-end-column="28" />
+          <caret line="409" column="16" selection-start-line="409" selection-start-column="16" selection-end-line="409" selection-end-column="16" />
           <folding>
             <element signature="e#271#305#0" expanded="true" />
           </folding>

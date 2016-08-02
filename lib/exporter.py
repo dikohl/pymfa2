@@ -218,7 +218,7 @@ class CSVExporter(object):
         import matplotlib.pyplot as plt
         root, file = os.path.split(self.outFileName)
         date, out = os.path.split(root)
-        path = os.path.join(date, "plots")
+        path = os.path.join(date[:-1],"plots")
         # create directory for saving the plots
         if not os.path.exists(path):
             os.makedirs(path)

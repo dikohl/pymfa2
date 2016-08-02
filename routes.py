@@ -80,13 +80,13 @@ def upload():
     if error is '':
         #get current time and create a folder with that name
         creationTime = datetime.datetime.strftime(datetime.datetime.now(), '%d-%m-%Y_%H+%M+%S')
-        save_path = 'analysis/' + creationTime
-        os.makedirs(save_path + "/out")
+        save_path = os.path.join('analysis',creationTime)
+        os.makedirs(os.path.join(save_path,"out"))
         
         #save the uploaded file to the directory
         upload.save(save_path) #appends upload.filename automatically
-        inputFile = save_path + "/" + upload.filename
-        output = save_path + "/" + outputFile
+        inputFile = os.path.join(save_path,upload.filename)
+        output = os.path.join(save_path,outputFile)
         
         #start the runner, this starts the analysis
         runner = Runner(inputFile, output)
@@ -124,10 +124,12 @@ def downloadFile():
         
         #if the source should be downloaded
         if output == 'source':
-            for root, dirs, files in os.walk('analysis/'+date):
+            analysis = os.path.join("analysis",date)
+            for root, dirs, files in os.walk(analysis):
                 for f in files:
                     if f[-4:] == '.csv':
-                        return static_file(date+'/'+f, root='analysis', download=True)
+                        filePath = os.path.join(date,f)
+                        return static_file(filePath, root='analysis', download=True)
             return '''
                 This file does not exist anymore! Somebody must have deleted it.
                 <form action="/upload" method="get">
@@ -135,10 +137,12 @@ def downloadFile():
                 </form>
                 '''
         if output == 'plots':
-            for root, dirs, files in os.walk('analysis/'+date+'plots'):
+            analysis = os.path.join("analysis", date)
+            for root, dirs, files in os.walk(analysis):
                 for f in files:
                     if f == 'plots.zip':
-                        return static_file(date+"/"+f, root='analysis', download=True)
+                        filePath = os.path.join(date,f)
+                        return static_file(filePath, root='analysis', download=True)
             else:
                 return '''
                     This analysis does not have any plots.
@@ -152,7 +156,7 @@ def downloadFile():
             #if so get rid of the number (everything after .csv)
             output = output[0:output.find('.csv')+4]'''
         #create the full path to the outputfile
-        download = date + "/" + "out/" + output
+        download = os.path.join(date,"out",output)
         #check if file is still there
         outputs = scanForOutputs()
         if download in outputs:
@@ -179,7 +183,7 @@ def deleteFile():
         date = request.forms.get('date')
         date = date.replace(':', '+')
         #delete directory
-        shutil.rmtree('analysis/' + date)
+        shutil.rmtree(os.path.join("analysis",date))
         #redirect to the updated upload view
         return redirect("/upload")
     #if not redirect to login view
@@ -208,7 +212,7 @@ def scanForOutputs():
     #scan the directory
     for root, dirs, files in os.walk('analysis'):
         folder, date = os.path.split(root)
-        for root, dirs, files in os.walk(root + '/out'):
+        for root, dirs, files in os.walk(os.path.join(root,'out')):
             for f in files:
                 outputs.append(os.path.join(date,"out",f))
     return outputs
@@ -230,7 +234,7 @@ def checkAndFixFormData(outputFile, upload):
         #fix the outputFile name if it does not end in .csv
         elif not outputFile.endswith(".csv"):
             outputFile = outputFile + ".csv"
-    return error, "out/"+outputFile
+    return error, os.path.join("out",outputFile)
         
 #maps the creation date to the output files
 def mapCreationDate(outputs):

@@ -55,10 +55,10 @@ class CSVExporter(object):
         padding = ["", "", "", "", ""]
         startPadding = ["", "", "", "", "", "", "", "", ""]
         stockHeader = (["Node Type", "Node Name", "Material", "Unit"] +
-                       padding + [""] + timeIndices)
+                       padding + [""] + self.timeIndices)
         linkHeader = (["Transfer Type", "SourceNode", "SourceMaterial",
                        "SourceUnit", "DestinationNode", "DestinationMaterial",
-                       "DestinationUnit", "Stages", "Description", ""] + timeIndices)
+                       "DestinationUnit", "Stages", "Description", ""] + self.timeIndices)
 
         # log flow data from flow compartments
         for comp in simulator.flowCompartments:
@@ -192,7 +192,7 @@ class CSVExporter(object):
                     table.append(stockPercentileRows[(i * len(system.percentiles)) + j])
 
         if system.entropy:
-            table = self.exportEntropy(table, timeIndices, entropyResult)
+            table = self.exportEntropy(table, self.timeIndices, entropyResult)
 
         with open(outFileName, 'w') as f:
             w = csv.writer(f, delimiter=';', lineterminator='\n',

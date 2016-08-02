@@ -51,7 +51,7 @@ class Entropy:
                 if transferType.lower() == "concentration" or transferType.lower() == "inflow":
                     continue
                 stages = self.metadataMatrix[i][7].split("|")
-                if '' in stages:
+                if transferType.lower() != "conversion" and '' in stages:
                     continue
                 srcName = self.metadataMatrix[i][1]
                 srcUnit = self.metadataMatrix[i][3]
@@ -75,7 +75,7 @@ class Entropy:
 
         for i in range(len(self.periods)):
             #see in export if we should use "stock" form stockValues or "delay" from flowValues
-            #self.periods[i].setStockValues()
+            self.periods[i].setStockValues()
             self.periods[i].convertUnits(self.conversions,i)
 
 class EntropyCalc(object):

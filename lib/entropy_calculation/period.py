@@ -6,8 +6,10 @@ class Period():
         self.year = year
         self.stages = dict()
         self.stocks = []
+        self.uniqueFlows = []
 
     def addFlow(self, flow):
+        self.uniqueFlows.append(flow)
         if flow.transferType.lower() == "delay":
             self.stocks.append(flow)
         for stage in flow.stages:
@@ -22,18 +24,16 @@ class Period():
 
     def getNodeInflows(self,stockFlow):
         inflow = 0
-        for key in self.stages.keys():
-            for flow in self.stages[key].flows:
-                if flow.destinationNode.name == stockFlow.sourceNode.name:
-                    inflow = inflow+flow.materialFlow
+        for flow in self.uniqueFlows:
+            if flow.destinationNode.name == stockFlow.sourceNode.name:
+                inflow = inflow+flow.materialFlow
         return inflow
 
     def getNodeOutflows(self,stockFlow):
         outflow = 0
-        for key in self.stages.keys():
-            for flow in self.stages[key].flows:
-                if flow.sourceNode.name == stockFlow.destinationNode.name:
-                    outflow = outflow+flow.materialFlow
+        for flow in self.uniqueFlows:
+            if flow.sourceNode.name == stockFlow.destinationNode.name:
+                outflow = outflow+flow.materialFlow
         return outflow
 
     def updateStockValue(self,flow,value):
@@ -44,11 +44,10 @@ class Period():
         for key in self.stages.keys():
             for flow in self.stages[key].flows:
                 for conv in conversions:
-                    if flow.getSourceUnit() == conv.fromUnit and flow.getDestinationUnit() == conv.toUnit:
-                        flow.convertUnits(conv[index])
-
-    def getSubstanceFlowSum(self):
-        return 0
+                    if flow.getSourceUnit() == conv.fromUnit and flow.getDestinationUnit() == conv.fromUnit:
+                        flow.convertUnits(conv.conversion[index])
+                        flow.destinationNode.unit = conv.toUnit
+                        flow.sourceNode.unit = conv.toUnit
 
     def __str__(self):
         return str(self.year) + ": " + str(self.stages)

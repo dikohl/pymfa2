@@ -202,6 +202,11 @@ class CSVExporter(object):
 
         if doPlot:
             self.exportPlots()
+
+        root, file = os.path.split(self.outFileName)
+        date, out = os.path.split(root)
+        path = os.path.join(date,"plots")
+        print(path)
         return
 
     # adds the entropy results to the table that is later printed to the output file
@@ -218,7 +223,7 @@ class CSVExporter(object):
         import matplotlib.pyplot as plt
         root, file = os.path.split(self.outFileName)
         date, out = os.path.split(root)
-        path = os.path.join(date[:-1],"plots")
+        path = os.path.join(date,"plots")
         # create directory for saving the plots
         if not os.path.exists(path):
             os.makedirs(path)
@@ -406,6 +411,7 @@ class CSVExporter(object):
                 for root, dirs, files in os.walk(path):
                     for file in files:
                         ziph.write(os.path.join(root, file))
+                ziph.close()
                 shutil.rmtree(path)
 
             print("\n")

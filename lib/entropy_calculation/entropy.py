@@ -12,6 +12,7 @@ and where needed the concentration of a substance from the source file.
 """
 
 import numpy as np
+import sys
 
 from lib.entropy_calculation.flow import Flow
 from lib.entropy_calculation.period import Period
@@ -20,9 +21,9 @@ from lib.entropy_calculation.result import Result, StageResult
 
 
 class Entropy:
-    def __init__(self, system, simulator, substanceConcentration):
+    def __init__(self, system, simulator, substanceConcentration, unitConversion):
         self.periods = []
-        self.conversions = []
+        self.conversions = unitConversion
         self.flowValues = {}
         self.concentrationValues = substanceConcentration
         self.Hmax = system.Hmax
@@ -48,7 +49,8 @@ class Entropy:
     def fillPeriods(self):
         for i in range(len(self.metadataMatrix)):
                 transferType = self.metadataMatrix[i][0]
-                if transferType.lower() == "concentration" or transferType.lower() == "inflow":
+                if transferType.lower() == "concentration" or transferType.lower() == "inflow" or \
+                                transferType.lower() == "conversion":
                     continue
                 stages = self.metadataMatrix[i][7].split("|")
                 if transferType.lower() != "conversion" and '' in stages:
@@ -66,12 +68,9 @@ class Entropy:
                             self.metadataMatrix[i][6]).lower()
                 values = self.flowValues[sourceName, targName][0]
                 concentrations = self.concentrationValues.get((sourceName, targName),[0] * (len(self.periods)))
-                if transferType.lower() == "conversion":
-                    self.conversions.append(Conversion(srcUnit, destUnit, values))
-                else:
-                    for j in range(len(self.periods)):
-                        flow = Flow(transferType,srcName,srcUnit,destName,destUnit,stages,values[j],concentrations[j])
-                        self.periods[j].addFlow(flow)
+                for j in range(len(self.periods)):
+                    flow = Flow(transferType,srcName,srcUnit,destName,destUnit,stages,values[j],concentrations[j])
+                    self.periods[j].addFlow(flow)
 
         for i in range(len(self.periods)):
             #see in export if we should use "stock" form stockValues or "delay" from flowValues
@@ -85,8 +84,13 @@ class EntropyCalc(object):
 
     def computeEntropy(self):
         result = Result()
+        printInfo = 0
+        if "--entropy" in sys.argv:
+            printInfo = 1
         for period in self.entropy.periods:
             for stage in period.stages.keys():
+                if printInfo:
+                    print(str(period.year)+" Stage "+str(stage)+":")
                 stageObj = period.stages[stage]
                 stageSum = stageObj.getSubstanceFlowSum()
                 for flow in stageObj.flows:
@@ -98,9 +102,14 @@ class EntropyCalc(object):
                         flow.HIIi = 0
                     else:
                         flow.HIIi = float(flow.concentration)*(-flow.Mi)*np.log2(float(flow.concentration))
-                    #if period.year == 2012 and stage == "6" and flow.transferType.lower() == "delay":
-                    #    print(flow)
+                    if printInfo and flow.concentration != 0:
+                        print(flow)
+                        print('Mi: '+str(flow.Mi))
+                        print('HIIi: '+str(flow.HIIi))
                 stageEntropy = stageObj.getHIIiSum()/self.entropy.Hmax
+                if printInfo:
+                    print("Entropy: "+str(stageEntropy))
+                    print("________________________________")
                 result.append(StageResult(period.year,stage,stageEntropy))
         return result
 

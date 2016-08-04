@@ -12,6 +12,7 @@ modified by kodi in February 2016
 
 import csv
 from .linker import System, InflowData, RateData, DelayData, SinkData
+from lib.entropy_calculation.conversion import Conversion
 
 
 class CSVImporter(object):
@@ -37,6 +38,7 @@ class CSVImporter(object):
         self.supportedReleaseFunctions = ['fix', 'list', 'rand', 'weibull']
 
         self.concentrationEntropy = dict()
+        self.conversions = []
 
     def load(self, fileName):
         # read a csv file and build the flow model
@@ -95,7 +97,7 @@ class CSVImporter(object):
             # delayed releases or neither delayed releases nor transfers.
             self.delayToRateSink()
 
-            return self.system, self.concentrationEntropy
+            return self.system, self.concentrationEntropy, self.conversions
 
     # check and log input for 'runs'
     def checkForRuns(self, row):
@@ -631,6 +633,7 @@ class CSVImporter(object):
         if transferType in self.supportedTransferTypes and \
                         transferType != 'inflow' and transferType != 'delay' \
                         and transferType != 'concentration':
+            valuesConv = []
             for c, v in enumerate(values):
                 if v.replace(" ", "") == "":
                     raise CSVParserException(
@@ -758,8 +761,11 @@ class CSVImporter(object):
                          "          'stoch|normal|0.5, 0.15|1'\n" +
                          "          'rand|0.65, 0.7, 0.71, 0.75, 0.8|1'")
                         % (self.rowNumber, self.colString(self.valuesOffset + c), v))
-
+                if transferType.lower() == "conversion":
+                    valuesConv.append(float(tempArg[1][0]))
                 splittedValues.append(tempArg)
+            if transferType.lower() == "conversion":
+                self.conversions.append(Conversion(srcUnit, dstUnit, valuesConv))
 
         # sanity checks for the values when using 'delay' as transfer type
         if transferType == 'delay':
@@ -1081,8 +1087,8 @@ class CSVImporter(object):
                             self.system.delays[nodeName].releases or
                             self.system.delays[nodeName].descriptions):
                         raise CSVParserException(
-                            ("row %d:\nSource node of a 'conversion' link " +
-                             "already exists as a source node of a different " +
+                            ("row %d:\nSource node of a 'conversion' link "+
+                             "already exists as a source node of a different "+
                              "link.\nsource node: %s") % (self.rowNumber, src))
                     else:
                         self.system.nodes[nodeName] = "conversion"

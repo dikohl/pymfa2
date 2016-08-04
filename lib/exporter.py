@@ -407,7 +407,7 @@ class CSVExporter(object):
                     for file in files:
                         ziph.write(os.path.join(root, file), arcname=file)
                 ziph.close()
-                
+
                 if os.path.exists(path):
                     for root, dirs, files in os.walk(path):
                         for file in files:

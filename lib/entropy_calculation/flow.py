@@ -19,6 +19,7 @@ class Flow:
             if "x" in self.stages:
                 self.substanceFlow = value
                 self.materialFlow = float(self.substanceFlow)/float(self.concentration)
+                #print(str(self.sourceNode)+" --> "+str(self.destinationNode)+": "+str(self.materialFlow))
             else:
                 self.materialFlow = value
                 self.substanceFlow = float(self.materialFlow)*float(self.concentration)
@@ -42,7 +43,7 @@ class Flow:
                 self.destinationNode.name == other.destinationNode.name)
 
     def __str__(self):
-        return str(self.sourceNode)+" --> "+str(self.destinationNode)+": "+str(self.materialFlow)
+        return str(self.sourceNode)+" --> "+str(self.destinationNode)+" (Mat: "+str(self.materialFlow)+" Sub: "+str(self.substanceFlow)
 
     def __repr__(self):
-        return str(self.sourceNode)+" --> "+str(self.destinationNode)+": "+str(self.materialFlow)
+        return str(self.sourceNode)+" --> "+str(self.destinationNode)+" (Mat: "+str(self.materialFlow)+" Sub: "+str(self.substanceFlow)

@@ -44,7 +44,7 @@ class Period():
         for key in self.stages.keys():
             for flow in self.stages[key].flows:
                 for conv in conversions:
-                    if flow.getSourceUnit() == conv.fromUnit and flow.getDestinationUnit() == conv.fromUnit:
+                    if flow.getSourceUnit().lower() == conv.fromUnit.lower() and flow.getDestinationUnit().lower() == conv.fromUnit.lower():
                         flow.convertUnits(conv.conversion[index])
                         flow.destinationNode.unit = conv.toUnit
                         flow.sourceNode.unit = conv.toUnit

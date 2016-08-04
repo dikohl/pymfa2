@@ -68,7 +68,6 @@ class SinkData(NodeData):
     self.name = deepcopy(nodeName + '_' + material + '_' + unit)
     self.category = copy(nodeName)
 
-
 class System(object):
   def __init__(self):
     self.runs = -99

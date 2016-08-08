@@ -90,7 +90,7 @@ class EntropyCalc(object):
         for period in self.entropy.periods:
             for stage in period.stages.keys():
                 if printInfo:
-                    print(str(period.year)+" Stage "+str(stage)+":")
+                    print(str(period.year)+": Stage "+str(stage)+":")
                 stageObj = period.stages[stage]
                 stageSum = stageObj.getSubstanceFlowSum()
                 for flow in stageObj.flows:

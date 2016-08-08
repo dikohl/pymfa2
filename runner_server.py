@@ -17,7 +17,7 @@ modified by dikohl
 This runner is used serverside and was changed to be called after a new file was uploaded.
 """
 
-import sys
+import sys, argparse
 
 from lib.entropy_calculation.entropy import Entropy, EntropyCalc
 from lib.exporter import CSVExporter
@@ -28,9 +28,17 @@ class Runner(object):
     def __init__(self, inputFile, outputFile):
         self.inFileName = inputFile
         self.outFileName = outputFile
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--plot',action='store_true')
+        parser.add_argument('--entropy',action='store_true')
+        args = parser.parse_args()
+
         self.doPlot = 0
-        if '--plot' in sys.argv [1:]:
+        self.showDetail = 0
+        if args.plot:
             self.doPlot = 1
+        if args.entropy:
+            self.showDetail = 1
 
     def run(self):
         exporter = CSVExporter()
@@ -38,7 +46,7 @@ class Runner(object):
         try:
             system, concentration, conversion = importer.load(self.inFileName)
             simulator = system.run()
-            entropyResult = EntropyCalc(Entropy(system, simulator, concentration, conversion)).computeEntropy()
+            entropyResult = EntropyCalc(Entropy(system, simulator, concentration, conversion)).computeEntropy(self.showDetail)
             exporter.export(self.outFileName, system, simulator, entropyResult, self.doPlot)
             #exporter.export(self.outFileName, system, simulator, self.doPlot)
         except CSVParserException as e:

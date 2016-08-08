@@ -30,15 +30,14 @@ class Runner(object):
         self.outFileName = outputFile
         parser = argparse.ArgumentParser()
         parser.add_argument('--plot',action='store_true')
-        parser.add_argument('--entropy',action='store_true')
+        parser.add_argument('--entropy',default=-10)
         args = parser.parse_args()
 
         self.doPlot = 0
-        self.showDetail = 0
         if args.plot:
             self.doPlot = 1
-        if args.entropy:
-            self.showDetail = 1
+
+        self.yearDetail = int(args.entropy)
 
     def run(self):
         exporter = CSVExporter()
@@ -46,7 +45,7 @@ class Runner(object):
         try:
             system, concentration, conversion = importer.load(self.inFileName)
             simulator = system.run()
-            entropyResult = EntropyCalc(Entropy(system, simulator, concentration, conversion)).computeEntropy(self.showDetail)
+            entropyResult = EntropyCalc(Entropy(system, simulator, concentration, conversion)).computeEntropy(self.yearDetail)
             exporter.export(self.outFileName, system, simulator, entropyResult, self.doPlot)
             #exporter.export(self.outFileName, system, simulator, self.doPlot)
         except CSVParserException as e:

@@ -82,11 +82,11 @@ class EntropyCalc(object):
     def __init__(self, entropy):
         self.entropy = entropy
 
-    def computeEntropy(self,showDetail):
+    def computeEntropy(self,yearDetail):
         result = Result()
         for period in self.entropy.periods:
             for stage in period.stages.keys():
-                if showDetail:
+                if yearDetail == period.year or yearDetail == 0:
                     print(str(period.year)+": Stage "+str(stage)+":")
                 stageObj = period.stages[stage]
                 stageSum = stageObj.getSubstanceFlowSum()
@@ -99,12 +99,12 @@ class EntropyCalc(object):
                         flow.HIIi = 0
                     else:
                         flow.HIIi = float(flow.concentration)*(-flow.Mi)*np.log2(float(flow.concentration))
-                    if showDetail and flow.concentration != 0:
+                    if flow.concentration != 0 and (period.year == yearDetail or yearDetail == 0):
                         print(flow)
                         print('Mi: '+str(flow.Mi))
                         print('HIIi: '+str(flow.HIIi)+'\n')
                 stageEntropy = stageObj.getHIIiSum()/self.entropy.Hmax
-                if showDetail:
+                if yearDetail == 0 or yearDetail == period.year:
                     print("Entropy: "+str(stageEntropy))
                     print("________________________________")
                 result.append(StageResult(period.year,stage,stageEntropy))

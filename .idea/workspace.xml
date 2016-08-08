@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="423a26b3-3782-49a4-b083-966339c97c95" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_server.py" afterPath="$PROJECT_DIR$/runner_server.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/exporter.py" afterPath="$PROJECT_DIR$/lib/exporter.py" />
     </list>
     <ignored path="pymfa2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +23,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="entropy.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="entropy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/entropy.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="570">
@@ -32,6 +31,16 @@
               <folding>
                 <element signature="e#374#392#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="exporter.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/exporter.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="765">
+              <caret line="56" column="55" selection-start-line="56" selection-start-column="55" selection-end-line="56" selection-end-column="55" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -46,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="runner_server.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="runner_server.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/runner_server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+            <state relative-caret-position="405">
+              <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
               <folding>
                 <element signature="e#466#486#0" expanded="true" />
               </folding>
@@ -61,7 +70,7 @@
       <file leaf-file-name="importer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/importer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
+            <state relative-caret-position="11430">
               <caret line="764" column="59" selection-start-line="764" selection-start-column="59" selection-end-line="764" selection-end-column="59" />
               <folding>
                 <element signature="e#201#211#0" expanded="true" />
@@ -120,16 +129,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="node.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/node.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="24" selection-start-line="2" selection-start-column="8" selection-end-line="3" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -161,14 +160,14 @@
         <option value="$PROJECT_DIR$/views/upload.tpl" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/stage.py" />
         <option value="$PROJECT_DIR$/routes.py" />
-        <option value="$PROJECT_DIR$/lib/exporter.py" />
         <option value="$PROJECT_DIR$/lib/linker.py" />
         <option value="$PROJECT_DIR$/lib/importer.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
-        <option value="$PROJECT_DIR$/runner_server.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
+        <option value="$PROJECT_DIR$/lib/exporter.py" />
+        <option value="$PROJECT_DIR$/runner_server.py" />
       </list>
     </option>
   </component>
@@ -220,8 +219,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -230,8 +227,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pymfa2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pymfa2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pymfa2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pymfa2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -695,13 +718,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/exporter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5730">
-          <caret line="382" column="17" selection-start-line="382" selection-start-column="17" selection-end-line="382" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/node.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -771,27 +787,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runner_server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-          <folding>
-            <element signature="e#466#486#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/importer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="11430">
           <caret line="764" column="59" selection-start-line="764" selection-start-column="59" selection-end-line="764" selection-end-column="59" />
           <folding>
             <element signature="e#201#211#0" expanded="true" />
@@ -805,6 +803,32 @@
           <caret line="104" column="59" selection-start-line="104" selection-start-column="59" selection-end-line="104" selection-end-column="59" />
           <folding>
             <element signature="e#374#392#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/exporter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="56" column="55" selection-start-line="56" selection-start-column="55" selection-end-line="56" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runner_server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
+          <folding>
+            <element signature="e#466#486#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -408,11 +408,5 @@ class CSVExporter(object):
                         ziph.write(os.path.join(root, file), arcname=file)
                 ziph.close()
 
-                if os.path.exists(path):
-                    for root, dirs, files in os.walk(path):
-                        for file in files:
-                            print(file)
-                #shutil.rmtree(path)
-
             print("\n")
         return

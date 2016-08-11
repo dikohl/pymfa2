@@ -38,7 +38,6 @@ class CSVImporter(object):
         self.supportedReleaseFunctions = ['fix', 'list', 'rand', 'weibull']
 
         self.concentrationEntropy = dict()
-        self.conversions = []
 
     def load(self, fileName):
         # read a csv file and build the flow model
@@ -97,7 +96,7 @@ class CSVImporter(object):
             # delayed releases or neither delayed releases nor transfers.
             self.delayToRateSink()
 
-            return self.system, self.concentrationEntropy, self.conversions
+            return self.system, self.concentrationEntropy
 
     # check and log input for 'runs'
     def checkForRuns(self, row):
@@ -764,8 +763,6 @@ class CSVImporter(object):
                 if transferType.lower() == "conversion":
                     valuesConv.append(float(tempArg[1][0]))
                 splittedValues.append(tempArg)
-            if transferType.lower() == "conversion":
-                self.conversions.append(Conversion(srcUnit, dstUnit, valuesConv))
 
         # sanity checks for the values when using 'delay' as transfer type
         if transferType == 'delay':

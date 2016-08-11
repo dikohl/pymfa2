@@ -7,6 +7,7 @@ class Period():
         self.stages = dict()
         self.stocks = []
         self.uniqueFlows = []
+        self.conversions = []
 
     def addFlow(self, flow):
         self.uniqueFlows.append(flow)
@@ -40,14 +41,20 @@ class Period():
         for stage in flow.stages:
             self.stages[stage].updateStockValue(flow,value)
 
-    def convertUnits(self, conversions, index):
+    def setTrueConversion(self):
+        for conversion in self.conversions:
+            infl = self.getNodeInflows(conversion)
+            conversion.calculate(infl)
+
+    def convertUnits(self):
         for key in self.stages.keys():
             for flow in self.stages[key].flows:
-                for conv in conversions:
-                    if flow.getSourceUnit().lower() == conv.fromUnit.lower() and flow.getDestinationUnit().lower() == conv.fromUnit.lower():
-                        flow.convertUnits(conv.conversion[index])
-                        flow.destinationNode.unit = conv.toUnit
-                        flow.sourceNode.unit = conv.toUnit
+                for conv in self.conversions:
+                    if flow.getSourceUnit().lower() == conv.getSourceUnit().lower() and \
+                                    flow.getDestinationUnit().lower() == conv.getSourceUnit().lower():
+                        flow.convertUnits(conv.conversion)
+                        flow.destinationNode.unit = conv.getDestinationUnit().lower()
+                        flow.sourceNode.unit = conv.getDestinationUnit().lower()
 
     def __str__(self):
         return str(self.year) + ": " + str(self.stages)

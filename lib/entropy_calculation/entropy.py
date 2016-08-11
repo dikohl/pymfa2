@@ -21,9 +21,8 @@ from lib.entropy_calculation.result import Result, StageResult
 
 
 class Entropy:
-    def __init__(self, system, simulator, substanceConcentration, unitConversion):
+    def __init__(self, system, simulator, substanceConcentration):
         self.periods = []
-        self.conversions = unitConversion
         self.flowValues = {}
         self.concentrationValues = substanceConcentration
         self.Hmax = system.Hmax
@@ -49,8 +48,7 @@ class Entropy:
     def fillPeriods(self):
         for i in range(len(self.metadataMatrix)):
                 transferType = self.metadataMatrix[i][0]
-                if transferType.lower() == "concentration" or transferType.lower() == "inflow" or \
-                                transferType.lower() == "conversion":
+                if transferType.lower() == "concentration" or transferType.lower() == "inflow":
                     continue
                 stages = self.metadataMatrix[i][7].split("|")
                 if transferType.lower() != "conversion" and '' in stages:
@@ -68,14 +66,21 @@ class Entropy:
                             self.metadataMatrix[i][6]).lower()
                 values = self.flowValues[sourceName, targName][0]
                 concentrations = self.concentrationValues.get((sourceName, targName),[0] * (len(self.periods)))
+
                 for j in range(len(self.periods)):
-                    flow = Flow(transferType,srcName,srcUnit,destName,destUnit,stages,values[j],concentrations[j])
-                    self.periods[j].addFlow(flow)
+                    if transferType.lower() == "conversion":
+                        conv = Conversion(transferType, srcName,srcUnit,destName,destUnit,stages,values[j],concentrations[j])
+                        self.periods[j].conversions.append(conv)
+                    else:
+                        flow = Flow(transferType,srcName,srcUnit,destName,destUnit,stages,values[j],concentrations[j])
+                        self.periods[j].addFlow(flow)
 
         for i in range(len(self.periods)):
             #see in export if we should use "stock" form stockValues or "delay" from flowValues
             self.periods[i].setStockValues()
-            self.periods[i].convertUnits(self.conversions,i)
+            self.periods[i].setTrueConversion()
+            self.periods[i].convertUnits()
+
 
 class EntropyCalc(object):
     #initiate EntropyCalc with the values of all the material flows, substance flows and concentrations

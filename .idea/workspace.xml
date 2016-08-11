@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="423a26b3-3782-49a4-b083-966339c97c95" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/flow.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/period.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/importer.py" afterPath="$PROJECT_DIR$/lib/importer.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_server.py" afterPath="$PROJECT_DIR$/runner_server.py" />
     </list>
     <ignored path="pymfa2.iws" />
@@ -23,11 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="entropy.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="entropy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/entropy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="101" column="97" selection-start-line="101" selection-start-column="97" selection-end-line="101" selection-end-column="97" />
+            <state relative-caret-position="450">
+              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding>
                 <element signature="e#374#392#0" expanded="true" />
               </folding>
@@ -35,65 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exporter.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/exporter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="56" column="55" selection-start-line="56" selection-start-column="55" selection-end-line="56" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="runner_server.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/runner_server.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding>
-                <element signature="e#466#486#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="importer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/importer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="764" column="59" selection-start-line="764" selection-start-column="59" selection-end-line="764" selection-end-column="59" />
-              <folding>
-                <element signature="e#201#211#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="period.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="conversion.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/conversion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="53" selection-start-line="1" selection-start-column="53" selection-end-line="1" selection-end-column="53" />
+            <state relative-caret-position="120">
+              <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -109,11 +60,55 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="runner_server.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/runner_server.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
+              <folding>
+                <element signature="e#466#486#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="components.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12600">
-              <caret line="841" column="62" selection-start-line="841" selection-start-column="56" selection-end-line="841" selection-end-column="62" />
+            <state relative-caret-position="705">
+              <caret line="1068" column="19" selection-start-line="1068" selection-start-column="19" selection-end-line="1068" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="importer.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/importer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="600">
+              <caret line="98" column="57" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
+              <folding>
+                <element signature="e#201#211#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="adjusted_functions_ExtDiskret.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/adjusted_functions_ExtDiskret.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-390">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="period.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
               <folding />
             </state>
           </provider>
@@ -122,8 +117,8 @@
       <file leaf-file-name="flow.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="87" selection-start-line="24" selection-start-column="87" selection-end-line="24" selection-end-column="87" />
+            <state relative-caret-position="195">
+              <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -161,13 +156,13 @@
         <option value="$PROJECT_DIR$/lib/entropy_calculation/stage.py" />
         <option value="$PROJECT_DIR$/routes.py" />
         <option value="$PROJECT_DIR$/lib/linker.py" />
-        <option value="$PROJECT_DIR$/lib/importer.py" />
-        <option value="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
-        <option value="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
-        <option value="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
         <option value="$PROJECT_DIR$/lib/exporter.py" />
+        <option value="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
+        <option value="$PROJECT_DIR$/lib/importer.py" />
         <option value="$PROJECT_DIR$/runner_server.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
+        <option value="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
+        <option value="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
       </list>
     </option>
   </component>
@@ -489,13 +484,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15780">
-          <caret line="1053" column="18" selection-start-line="1053" selection-start-column="18" selection-end-line="1053" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1845">
@@ -740,78 +728,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="24" selection-start-line="2" selection-start-column="8" selection-end-line="3" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/simulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="37" column="61" selection-start-line="37" selection-start-column="58" selection-end-line="37" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="24" column="32" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/stage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="3" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12600">
-          <caret line="841" column="62" selection-start-line="841" selection-start-column="56" selection-end-line="841" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/linker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/conversion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="53" selection-start-line="1" selection-start-column="53" selection-end-line="1" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="87" selection-start-line="24" selection-start-column="87" selection-end-line="24" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/importer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="764" column="59" selection-start-line="764" selection-start-column="59" selection-end-line="764" selection-end-column="59" />
-          <folding>
-            <element signature="e#201#211#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -831,10 +747,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/adjusted_functions_ExtDiskret.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-390">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="1068" column="19" selection-start-line="1068" selection-start-column="19" selection-end-line="1068" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/simulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="37" column="61" selection-start-line="37" selection-start-column="58" selection-end-line="37" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/linker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="70" column="12" selection-start-line="70" selection-start-column="6" selection-end-line="70" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="24" column="32" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/stage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="3" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/importer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="98" column="57" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
+          <folding>
+            <element signature="e#201#211#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/runner_server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="675">
+          <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
           <folding>
             <element signature="e#466#486#0" expanded="true" />
           </folding>
@@ -843,11 +817,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/entropy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="101" column="97" selection-start-line="101" selection-start-column="97" selection-end-line="101" selection-end-column="97" />
+        <state relative-caret-position="450">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
           <folding>
             <element signature="e#374#392#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/conversion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
+          <folding />
         </state>
       </provider>
     </entry>

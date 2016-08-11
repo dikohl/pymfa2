@@ -12,8 +12,11 @@ class Flow:
         self.Mi = 0.0
         self.HIIi = 0.0
 
+        if self.transferType.lower() == 'conversion':
+            self.conversion = value
+
         if float(self.concentration) == 0:
-            self.materialFlow = 0.0
+            self.materialFlow = value
             self.substanceFlow = 0.0
         else:
             if "x" in self.stages:

@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="423a26b3-3782-49a4-b083-966339c97c95" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/flow.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/entropy_calculation/period.py" afterPath="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/importer.py" afterPath="$PROJECT_DIR$/lib/importer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_server.py" afterPath="$PROJECT_DIR$/runner_server.py" />
     </list>
     <ignored path="pymfa2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -75,18 +70,18 @@
       <file leaf-file-name="components.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
+            <state relative-caret-position="16005">
               <caret line="1068" column="19" selection-start-line="1068" selection-start-column="19" selection-end-line="1068" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="importer.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="importer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/importer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="98" column="57" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
+            <state relative-caret-position="285">
+              <caret line="761" column="85" selection-start-line="761" selection-start-column="85" selection-end-line="761" selection-end-column="85" />
               <folding>
                 <element signature="e#201#211#0" expanded="true" />
               </folding>
@@ -97,17 +92,17 @@
       <file leaf-file-name="adjusted_functions_ExtDiskret.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/adjusted_functions_ExtDiskret.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-390">
+            <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="period.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="period.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
+            <state relative-caret-position="840">
               <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
               <folding />
             </state>
@@ -117,7 +112,7 @@
       <file leaf-file-name="flow.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
+            <state relative-caret-position="225">
               <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
               <folding />
             </state>
@@ -158,11 +153,11 @@
         <option value="$PROJECT_DIR$/lib/linker.py" />
         <option value="$PROJECT_DIR$/lib/exporter.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/flow.py" />
-        <option value="$PROJECT_DIR$/lib/importer.py" />
         <option value="$PROJECT_DIR$/runner_server.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/entropy.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/conversion.py" />
         <option value="$PROJECT_DIR$/lib/entropy_calculation/period.py" />
+        <option value="$PROJECT_DIR$/lib/importer.py" />
       </list>
     </option>
   </component>
@@ -222,52 +217,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pymfa2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="entropy_calculation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -444,8 +397,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19583334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -735,7 +688,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="765">
           <caret line="56" column="55" selection-start-line="56" selection-start-column="55" selection-end-line="56" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -743,13 +695,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/adjusted_functions_ExtDiskret.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-390">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -757,7 +708,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/dpmfa_simulator/components.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
+        <state relative-caret-position="16005">
           <caret line="1068" column="19" selection-start-line="1068" selection-start-column="19" selection-end-line="1068" selection-end-column="19" />
           <folding />
         </state>
@@ -767,7 +718,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="37" column="61" selection-start-line="37" selection-start-column="58" selection-end-line="37" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -775,7 +725,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="70" column="12" selection-start-line="70" selection-start-column="6" selection-end-line="70" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -783,7 +732,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="24" column="32" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -792,16 +740,6 @@
         <state relative-caret-position="30">
           <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="3" selection-end-column="23" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/importer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="98" column="57" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
-          <folding>
-            <element signature="e#201#211#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -815,13 +753,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/entropy.py">
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding>
-            <element signature="e#374#392#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="225">
+          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -833,19 +777,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/flow.py">
+    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/entropy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
-          <folding />
+        <state relative-caret-position="450">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding>
+            <element signature="e#374#392#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/entropy_calculation/period.py">
+    <entry file="file://$PROJECT_DIR$/lib/importer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
-          <folding />
+        <state relative-caret-position="285">
+          <caret line="761" column="85" selection-start-line="761" selection-start-column="85" selection-end-line="761" selection-end-column="85" />
+          <folding>
+            <element signature="e#201#211#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

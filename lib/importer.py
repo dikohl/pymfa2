@@ -760,8 +760,6 @@ class CSVImporter(object):
                          "          'stoch|normal|0.5, 0.15|1'\n" +
                          "          'rand|0.65, 0.7, 0.71, 0.75, 0.8|1'")
                         % (self.rowNumber, self.colString(self.valuesOffset + c), v))
-                if transferType.lower() == "conversion":
-                    valuesConv.append(float(tempArg[1][0]))
                 splittedValues.append(tempArg)
 
         # sanity checks for the values when using 'delay' as transfer type

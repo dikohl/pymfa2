@@ -674,6 +674,22 @@ class CSVImporter(object):
                              "as the second argument.\nExample: '0.8'")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[1]))
+                    if transferType == "fraction" or transferType == "rate":
+                        if tempArg[1][0] > 1.0 or tempArg[1][0] < 0:
+                            raise CSVParserException(
+                                ("\n--------------------\n" +
+                                 "row %d, col %s:\nRate is bigger than 1 or negative. " +
+                                 "Only positive rates <= 1.0 are allowed, got '%s'")
+                                % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                   tempArg[1][0]))
+                    if transferType == "conversion":
+                        if tempArg[1][0] < 0:
+                            raise CSVParserException(
+                                ("\n--------------------\n" +
+                                 "row %d, col %s:\nRate is negative. " +
+                                 "Only positive rates are allowed, got '%s'")
+                                % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                   tempArg[1][0]))
                     try:
                         tempArg[2] = int(tempArg[2])
                     except ValueError:
@@ -712,6 +728,26 @@ class CSVImporter(object):
                              "float values as parameters for the chosen function.")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[2]))
+                    if transferType == "fraction" or transferType == "rate":
+                        for i in range(len(tempArg[2])):
+                            if tempArg[2][i] > 1.0 or tempArg[2][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nRates or parameters are bigger " +
+                                     "than 1 or negative. Only positive rates and " +
+                                     "parameters <= 1.0 are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[2]))
+                    if transferType == "conversion":
+                        for i in range(len(tempArg[2])):
+                            if tempArg[2][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nRates or parameters are " +
+                                     "negative. Only positive rates and " +
+                                     "parameters are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[2]))
                     try:
                         tempArg[3] = int(tempArg[3])
                     except ValueError:
@@ -741,6 +777,26 @@ class CSVImporter(object):
                              "items.\nExample: '0.7, 0.69, 0.71, 0.74'")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[1]))
+                    if transferType == "fraction" or transferType == "rate":
+                        for i in range(len(tempArg[1])):
+                            if tempArg[1][i] > 1.0 or tempArg[1][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nAt least one rate is bigger " +
+                                     "than 1 or negative. Only positive rates <= " +
+                                     "1.0 are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[1]))
+                    if transferType == "conversion":
+                        for i in range(len(tempArg[1])):
+                            if tempArg[1][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nAt least one rate is " +
+                                     "negative. Only positive rates are allowed, " +
+                                     "got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[1]))
                     try:
                         tempArg[2] = int(tempArg[2])
                     except ValueError:
@@ -814,6 +870,14 @@ class CSVImporter(object):
                              "as the second argument.\nExample: '0.8'")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[1]))
+                    if tempArg[1][0] > 1.0 or tempArg[1][0] < 0:
+                        raise CSVParserException(
+                            ("\n--------------------\n" +
+                             "row %d, col %s:\nRate is bigger than 1 or " +
+                             "negative. Only positive rates <= 1.0 are allowed" +
+                             ", got '%s'")
+                            % (self.rowNumber, self.colString(self.valuesOffset + c),
+                               tempArg[1][0]))
                     try:
                         tempArg[2] = int(tempArg[2])
                     except ValueError:
@@ -841,6 +905,17 @@ class CSVImporter(object):
                              "fifth argument.")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[4]))
+                    if tempArg[3] == "fix" or tempArg[3] == "rand" or \
+                                    tempArg[3] == "list":
+                        for i in range(len(tempArg[4])):
+                            if tempArg[4][i] > 1.0 or tempArg[4][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nRates or parameters are bigger " +
+                                     "than 1 or negative. Only positive rates and " +
+                                     "parameters <= 1.0 are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[4]))
                     try:
                         tempArg[5] = int(tempArg[5])
                     except ValueError:
@@ -883,6 +958,15 @@ class CSVImporter(object):
                              "float values as parameters for the chosen function.")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[2]))
+                    for i in range(len(tempArg[2])):
+                        if tempArg[2][i] > 1.0 or tempArg[2][i] < 0:
+                            raise CSVParserException(
+                                ("\n--------------------\n" +
+                                 "row %d, col %s:\nRates or parameters are bigger " +
+                                 "than 1 or negative. Only positive rates and " +
+                                 "parameters <= 1.0 are allowed, got '%s'")
+                                % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                   tempArg[2]))
                     try:
                         tempArg[3] = int(tempArg[3])
                     except ValueError:
@@ -910,6 +994,17 @@ class CSVImporter(object):
                              "sixth argument.")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[5]))
+                    if tempArg[4] == "fix" or tempArg[4] == "rand" or \
+                                    tempArg[4] == "list":
+                        for i in range(len(tempArg[5])):
+                            if tempArg[5][i] > 1.0 or tempArg[5][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nRates or parameters are bigger " +
+                                     "than 1 or negative. Only positive rates and " +
+                                     "parameters <= 1.0 are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[5]))
                     try:
                         tempArg[6] = int(tempArg[6])
                     except ValueError:
@@ -942,6 +1037,15 @@ class CSVImporter(object):
                              "items.\nExample: '0.7, 0.69, 0.71, 0.74'")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[1]))
+                    for i in range(len(tempArg[1])):
+                        if tempArg[1][i] > 1.0 or tempArg[1][i] < 0:
+                            raise CSVParserException(
+                                ("\n--------------------\n" +
+                                 "row %d, col %s:\nRates are bigger than 1 or " +
+                                 "negative. Only positive rates <= 1.0 are " +
+                                 "allowed, got '%s'")
+                                % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                   tempArg[1]))
                     try:
                         tempArg[2] = int(tempArg[2])
                     except ValueError:
@@ -969,6 +1073,17 @@ class CSVImporter(object):
                              "fifth argument.")
                             % (self.rowNumber, self.colString(self.valuesOffset + c),
                                tempArg[4]))
+                    if tempArg[3] == "fix" or tempArg[3] == "rand" or \
+                                    tempArg[3] == "list":
+                        for i in range(len(tempArg[4])):
+                            if tempArg[4][i] > 1.0 or tempArg[4][i] < 0:
+                                raise CSVParserException(
+                                    ("\n--------------------\n" +
+                                     "row %d, col %s:\nRates or parameters are bigger " +
+                                     "than 1 or negative. Only positive rates and " +
+                                     "parameters <= 1.0 are allowed, got '%s'")
+                                    % (self.rowNumber, self.colString(self.valuesOffset + c),
+                                       tempArg[4]))
                     try:
                         tempArg[5] = int(tempArg[5])
                     except ValueError:

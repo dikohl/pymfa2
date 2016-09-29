@@ -242,4 +242,4 @@ class Model(object):
 
         if not self.inflows:
             print('No model inflow defined!')
-        print('model valitity checked')
+        print('model validity checked')

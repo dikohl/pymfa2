@@ -39,7 +39,8 @@ class Period():
 
     def updateStockValue(self,flow,value):
         for stage in flow.stages:
-            self.stages[stage].updateStockValue(flow,value)
+            if stage != "x":
+                self.stages[stage].updateStockValue(flow,value)
 
     def setTrueConversion(self):
         for conversion in self.conversions:

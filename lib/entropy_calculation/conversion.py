@@ -1,3 +1,5 @@
+import numpy as np
+
 from lib.entropy_calculation.flow import Flow
 
 class Conversion(Flow):
@@ -6,4 +8,4 @@ class Conversion(Flow):
 
     def calculate(self, infl):
         if infl != 0:
-            self.conversion = self.conversion/infl
+            self.conversion = np.divide(np.float64(self.conversion), np.float64(infl))

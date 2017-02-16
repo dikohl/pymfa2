@@ -1,3 +1,5 @@
+import numpy as np
+
 class Stage:
     def __init__(self, stage):
         self.stage = stage
@@ -7,24 +9,24 @@ class Stage:
         self.flows.append(flow)
 
     def getSubstanceFlowSum(self):
-        sum = 0.0
+        sum = np.float64(0.0)
         for flow in self.flows:
-            sum += float(flow.substanceFlow)
+            sum = np.float64(np.add(np.float64(sum), np.float64(flow.substanceFlow)))
         return sum
 
     def getMiSum(self):
-        sum = 0.0
+        sum = np.float64(0.0)
         for flow in self.flows:
-            sum = sum + float(flow.Mi)
+            sum = np.float64(np.add(np.float64(sum), np.float64(flow.Mi)))
         return sum
 
     def getHIIiSum(self):
-        sum = 0.0
+        sum = np.float64(0.0)
         for flow in self.flows:
-            sum = sum + float(flow.HIIi)
+            sum = np.float64(np.add(np.float64(sum), np.float64(flow.HIIi)))
         return sum
 
     def updateStockValue(self, searchFlow, value):
         for flow in self.flows:
             if searchFlow == flow:
-                flow.setFlowValue(value)
+                flow.setFlowValue(np.float64(value))

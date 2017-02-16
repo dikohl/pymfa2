@@ -1,3 +1,5 @@
+import numpy as np
+
 from lib.entropy_calculation.stage import Stage
 
 
@@ -21,20 +23,20 @@ class Period():
         for stock in self.stocks:
             inflow = self.getNodeInflows(stock)
             outflow = self.getNodeOutflows(stock)
-            self.updateStockValue(stock, inflow-outflow)
+            self.updateStockValue(stock, np.subtract(np.float64(inflow), np.float64(outflow)))
 
     def getNodeInflows(self,stockFlow):
         inflow = 0
         for flow in self.uniqueFlows:
             if flow.destinationNode.name == stockFlow.sourceNode.name:
-                inflow = inflow+flow.materialFlow
+                inflow = np.add(np.float64(inflow),np.float64(flow.materialFlow))
         return inflow
 
     def getNodeOutflows(self,stockFlow):
         outflow = 0
         for flow in self.uniqueFlows:
             if flow.sourceNode.name == stockFlow.destinationNode.name:
-                outflow = outflow+flow.materialFlow
+                outflow = np.add(np.float64(outflow), np.float64(flow.materialFlow))
         return outflow
 
     def updateStockValue(self,flow,value):

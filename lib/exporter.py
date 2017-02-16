@@ -11,6 +11,7 @@ csv file and creates plots of the material flows and stocks.
 """
 
 from io import BytesIO as StringIO
+import re
 import os
 import zipfile
 import shutil
@@ -208,11 +209,15 @@ class CSVExporter(object):
     def exportEntropy(self, table, timeIndices, entropyResult):
         table.append(["Entropy"] + timeIndices)
         keys = entropyResult.stageResults.keys()
-        for key in sorted(keys):
-            values = [entropyResult.stageResults[key].entropyResults[year] for year in
-                      sorted(entropyResult.stageResults[key].entropyResults.keys())]
+        sorted_keys = sorted([self.atoi(key) for key in keys])
+        for key in sorted_keys:
+            key = str(key)
+            values = [entropyResult.stageResults[key].entropyResults[year] for year in sorted(entropyResult.stageResults[key].entropyResults.keys())]
             table.append(["Stage " + key] + values)
         return table
+    
+    def atoi(self, text):
+        return int(text) if text.isdigit() else text
 
     def exportPlots(self):
         import matplotlib.pyplot as plt

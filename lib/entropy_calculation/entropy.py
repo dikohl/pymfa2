@@ -76,7 +76,7 @@ class Entropy:
                         self.periods[j].addFlow(flow)
 
         for i in range(len(self.periods)):
-            #see in export if we should use "stock" form stockValues or "delay" from flowValues
+            #see in export if we should use "stock" from stockValues or "delay" from flowValues
             self.periods[i].setStockValues()
             self.periods[i].setTrueConversion()
             self.periods[i].convertUnits()
@@ -94,25 +94,25 @@ class EntropyCalc(object):
                 if yearDetail == period.year or yearDetail == 0:
                     print(str(period.year)+": Stage "+str(stage)+":")
                 stageObj = period.stages[stage]
-                stageSum = stageObj.getSubstanceFlowSum()
+                stageSum = np.float64(stageObj.getSubstanceFlowSum())
                 for flow in stageObj.flows:
                     if stageSum == 0:
                         flow.Mi = 0
                     else:
-                        flow.Mi = flow.materialFlow/stageSum
-                    if flow.concentration == 0:
+                        flow.Mi = np.divide(flow.materialFlow, stageSum)
+                    if np.float64(flow.concentration) == np.float64(0.0):
                         flow.HIIi = 0
                     else:
-                        flow.HIIi = float(flow.concentration)*(-flow.Mi)*np.log2(float(flow.concentration))
+                        flow.HIIi = np.multiply(np.multiply(np.float64(flow.concentration),(-np.float64(flow.Mi))),np.log2(np.float64(flow.concentration)))
                     if flow.concentration != 0 and (period.year == yearDetail or yearDetail == 0):
                         print(flow)
                         print('Mi: '+str(flow.Mi))
                         print('HIIi: '+str(flow.HIIi)+'\n')
-                stageEntropy = stageObj.getHIIiSum()/self.entropy.Hmax
+                stageEntropy = np.divide(np.float64(stageObj.getHIIiSum()), np.float64(self.entropy.Hmax))
                 if yearDetail == 0 or yearDetail == period.year:
-                    print("Entropy: "+str(stageEntropy))
+                    print("Entropy: "+str(np.float64(stageEntropy)))
                     print("________________________________")
-                result.append(StageResult(period.year,stage,stageEntropy))
+                result.append(StageResult(period.year,stage,np.float64(stageEntropy)))
         return result
 
 class EntropyException(Exception):

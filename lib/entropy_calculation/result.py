@@ -1,3 +1,5 @@
+import numpy as np
+
 class Result:
     def __init__(self):
         self.stageResults = dict()
@@ -15,7 +17,7 @@ class StageResult:
     def __init__(self,year,stage,entropyResult):
         self.stage = stage
         self.entropyResults = dict()
-        self.entropyResults[year] = entropyResult
+        self.entropyResults[year] = np.float64(entropyResult)
 
     def append(self, stageResult):
         for key in stageResult.entropyResults.keys():
@@ -23,4 +25,4 @@ class StageResult:
             self.entropyResults[key] = stageResult.entropyResults[key]
 
     def __repr__(self):
-        return [str(self.enropyResults[key]) for key in self.entropyResults.keys()]
+        return [str(np.float64(self.enropyResults[key])) for key in self.entropyResults.keys()]
